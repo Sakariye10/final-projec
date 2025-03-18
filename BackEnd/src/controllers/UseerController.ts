@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { hashedPasswordSync } from "../helpers/utils/Bcrypt";
 const prisma = new PrismaClient();
 
 // Get All Users
@@ -87,12 +88,14 @@ export const creatingUser = async ( req : Request , res : Response) => {
             return
         }
 
+        const Hash = hashedPasswordSync(Password)
+
         const newUser = await prisma.users.create({
             data : {
                 Name,
                 Phone,
                 Email,
-                Password,
+                Password : Hash,
                 Role : Email === "yaanbo306@gmail.com" ? "Super_Admin" : "User"
             }
         })
