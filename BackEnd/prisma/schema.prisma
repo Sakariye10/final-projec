@@ -45,13 +45,11 @@ model Hotel {
   Is_Deleted Boolean  @default(false)
   Created_At DateTime @default(now())
   Updated_At DateTime @updatedAt
-  Floor      Floor[]
 }
 
 model Floor {
   F_Id       Int      @id @default(autoincrement())
   F_No       String
-  H_Id       Int
   No_Rooms   Int
   Author_Id  Int
   Is_Deleted Boolean  @default(false)
@@ -59,7 +57,6 @@ model Floor {
   Updated_At DateTime @updatedAt
 
   // Relation Ships Part 
-  Hotel Hotel   @relation(fields: [H_Id], references: [H_Id])
   User  Users   @relation(fields: [Author_Id], references: [U_Id])
   Rooms Rooms[]
 }
