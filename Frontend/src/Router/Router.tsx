@@ -5,6 +5,7 @@ import Register from '../Pages/Register/Register'
 import Dash_router from '../Dash_Com/Dash_router'
 import Main from '../Pages/Dashboard/Main'
 import Rooms from '../Pages/Dashboard/Rooms'
+import AllUsers from '../Pages/Dashboard/Users'
 
 const Router = () => {
   return (
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
             {
                 path : 'rooms',
                 element : <Rooms />
+            },
+            {
+                path : 'users',
+                element : <AllUsers />
             }
         ]
     }

@@ -1,10 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { loginSlice } from './Pages/Login';
+import { getAllUsersSlice } from './Dashboard/Users/AllUsers';
+import { newUserSlice } from './Dashboard/Users/NewUser';
 
 
 export const store = configureStore({
     reducer : {
-        login : loginSlice.reducer
+        login : loginSlice.reducer,
+
+        // Pages Endpoints Starts In Here 
+        // User Endpoints
+        AllUsers : getAllUsersSlice.reducer,
+        NewUser : newUserSlice.reducer,
     }
 })
 

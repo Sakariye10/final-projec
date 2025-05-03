@@ -1,5 +1,10 @@
 import express from 'express'
 import UserRoute from './routes/UserRoute'
+import FloorRoute from './routes/FloorRoute'
+import CustomerRoute from './routes/CustomerRoute'
+import EmployeeRoute from './routes/EmployeeRoute'
+import RoomRoute from './routes/RoomRoute'
+import RoomTypeRoute from './routes/RoomtypeRoute'
 import cors from 'cors'
 const app = express();
 const port = 5000;
@@ -13,6 +18,11 @@ app.use(
 )
 
 app.use('/api/user' , UserRoute)
+app.use('/api/rooms' , RoomRoute)
+app.use('/api/roomtype' , RoomTypeRoute)
+app.use('/api/customer' , CustomerRoute)
+app.use('/api/employee' , EmployeeRoute)
+app.use('/api/floor' , FloorRoute)
 
 
 app.listen(port , () => {
