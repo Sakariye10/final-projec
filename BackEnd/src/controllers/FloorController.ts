@@ -273,3 +273,45 @@ export const trashFloor = async ( req : customUserRequest , res : Response) => {
     })
   }
 }
+
+
+// Get One floors by id
+export const deletingFloor = async (req: customUserRequest, res: Response) => {
+  try {
+    const { F_Id } = req.params;
+    if (!F_Id) {
+      res.status(401).json({
+        IsSuccess: false,
+        message: "Provide Floor Id",
+      });
+    }
+    const Onefloor = prisma.floor.findFirst({
+      where: {
+        F_Id: +F_Id,
+        Is_Deleted : true
+      },
+    });
+    if (!Onefloor) {
+      res.status(401).json({
+        IsSuccess: false,
+        message: "This floor is not found",
+      });
+    }
+
+    const deletingFloor = await prisma.floor.delete({
+      where : {
+        F_Id : + F_Id
+      }
+    })
+
+    res.status(201).json({
+      IsSuccess: true,
+      message: "Floor Deleted Successfully",
+    });
+  } catch (error) {
+    res.status(501).json({
+      IsSuccess: false,
+      message: "Something Went Wrong",
+    });
+  }
+};

@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken'
 
 interface UserData{
     U_Id : number,
-    Firstname : string 
-    Lastname : string 
+    Name : string 
+    Phone : string 
     Email : string 
     Role : string
  }

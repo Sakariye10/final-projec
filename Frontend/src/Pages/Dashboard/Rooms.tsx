@@ -1,99 +1,272 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { FaTrashAlt } from "react-icons/fa";
+import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
+import { IoFilterSharp } from "react-icons/io5";
+import { RiEditCircleFill } from "react-icons/ri";
+import { VscGitPullRequestNewChanges } from "react-icons/vsc";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../Redux/Store";
+import dayjs from "dayjs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../components/ui/dialog";
+import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
+import toast from "react-hot-toast";
+import { newUsersFn } from "../../Redux/Dashboard/Users/NewUser";
 
-const Rooms = () => {
+const AllUsers = () => {
+  const AllUserState = useSelector((state: RootState) => state.AllUsers);
+  const dispatch = useDispatch<AppDispatch>();
+  const toastId = 'userpage'
+  useEffect(() => {
+    dispatch(getAllUsersFn());
+  }, []);
+
+  // Use State Functions Starts Here
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filtered laptops based on search term by name, price, or core
+  const filteredLaptops = AllUserState?.data?.filter(
+    (item) =>
+      item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Email.toString().includes(searchTerm) ||
+      item.Role.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Registration Functions Starts Here
+ // Creating New User Functions Startting In here 
+ const newUserState = useSelector((state : RootState) => state.NewUser)
+
+ const [Name , setName] = useState('')
+ const [Phone , setPhone] = useState('')
+ const [Email , setEmail] = useState('')
+ const [Password  , setPassword] = useState('')
+
+ useEffect(() => {
+   if(newUserState.IsLoading){
+     toast.loading('Loading..' , { id : toastId})
+   }
+   if(newUserState.IsSuccess){
+     toast.success('New User Registered Successfully' , { id : toastId})
+      dispatch(getAllUsersFn())
+   }
+   if(newUserState.IsError){
+     toast.error(newUserState.E_message , { id : toastId})
+   }
+ },[newUserState])
+
+ const handleRegisterSubmit = () => {
+   const data = {
+     Name,
+     Phone,
+     Email,
+     Password 
+   }
+   dispatch(newUsersFn(data))
+ }
+
+
+
   return (
-    <div className="p-4">
-      {/* Header Part Starts In Here */}
-      <div className="w-full flex  items-center justify-between">
-        <h2>All Rooms Data</h2>
-        <div className="flex gap-3 items-center">
+    <div>
+      {/* Top Part */}
+      <div className="flex justify-between px-6 mt-3 items-center">
+        <div className="ml-4">
+          <h2 className="text-lg font-semibold text-gray-400 font-[Roboto]">
+            {" "}
+            All Rooms Data
+          </h2>
+        </div>
+        {/* Dialog Part Starts Here */}
+        <div className="flex items-center justify-center mr-1 gap-4">
           <input
             type="text"
-            className="border border-gray-300 text-sm p-1.5 rounded"
+            className="px-3 py-3 text-center shadow-md bg-white rounded-md text-sm"
             placeholder="Search Here"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="py-1.5 px-4 bg-indigo-500 text-white rounded-md text-sm font-semibold">
-            Add New
-          </button>
+          <Dialog>
+            <DialogTrigger className="bg-indigo-500 text-white px-4 py-2 font-serif rounded-md font-semibold flex items-center gap-2">
+              <span className="text-lg font-bold">
+                <VscGitPullRequestNewChanges />
+              </span>{" "}
+              New Room
+            </DialogTrigger>
+            <DialogContent className="bg-white">
+              <DialogHeader>
+                <DialogTitle>Adding New Room</DialogTitle>
+                <DialogDescription>
+                  Make sure data that you entered in this dialog registration.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid grid-cols-1 gap-4 mt-2">
+                <div className="flex flex-col gap-1">
+                  {" "}
+                  <label className="text-sm font-semibold">Name</label>{" "}
+                  <input
+                    type="text"
+                    value={Name}
+                    onChange={(e) => setName(e.target.value)}
+                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="Color" className="text-sm font-semibold">
+                    Phone
+                  </label>{" "}
+                  <input
+                    type="text"
+                    value={Phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="Color" className="text-sm font-semibold">
+                    Email
+                  </label>{" "}
+                  <input
+                    type="email"
+                    value={Email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="Color" className="text-sm font-semibold">
+                    Password
+                  </label>{" "}
+                  <input
+                    type="password"
+                    value={Password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                  />
+                </div>
+              </div>
+              <button className="w-full bg-indigo-500 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded-md text-white mt-2" onClick={handleRegisterSubmit}>
+                <span className=" text-xl">
+                  <IoIosAddCircle />
+                </span>{" "}
+                Register User
+              </button>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
-      {/* Filteration Part */}
-      <div className="flex justify-between my-5">
-        <label htmlFor="">14 Rooms Are Registered</label>
-      <button className="bg-indigo-600 text-white py-2 px-4 rounded justify-end"></button>
-
-<button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown button <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-</svg>
-</button>
-
-<div id="dropdown" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
-    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-      <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-      </li>
-      <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-      </li>
-      <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-      </li>
-      <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-      </li>
-    </ul>
-</div>
-
-      </div>
-
       {/* Table Part */}
-
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 border border-gray-200">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-100">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Product name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">Color</div>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">Category</div>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">Price</div>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <span className="sr-only">Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="bg-white border-b border-gray-200">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-              >
-                Apple MacBook Pro 17"
-              </th>
-              <td className="px-6 py-4">Silver</td>
-              <td className="px-6 py-4">Laptop</td>
-              <td className="px-6 py-4">$2999</td>
-              <td className="px-6 py-4 text-right">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div className=" px-6 mt-6  ">
+        <div className="bg-white h-[81vh] rounded-2xl pt-3">
+          <div className="w-[98%] mx-auto mt-2">
+            <table className="w-full text-sm text-left rtl:text-right ">
+              <thead className="text-xs text-gray-700  bg-[#F2F7FB] shadow-md rounded-lg">
+                <tr>
+                  <th scope="col" className="px-4 py-2.5">
+                    <div className="flex items-center">
+                      <input
+                        id="checkbox-all-search"
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label className="sr-only">checkbox</label>
+                    </div>
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-left">
+                    Id
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-left">
+                    Name
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-center">
+                    Email
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-center">
+                    Phone
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-center">
+                    Role
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-center">
+                    Registered
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-center">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLaptops?.map((item, id) => (
+                  <tr className="bg-white border-b" key={id}>
+                    <td className="w-4 p-4">
+                      <div className="flex items-center">
+                        <input
+                          id="checkbox-table-search-1"
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label className="sr-only">checkbox</label>
+                      </div>
+                    </td>
+                    <td
+                      scope="row"
+                      className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      {item.U_Id}
+                    </td>
+                    <td
+                      scope="row"
+                      className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      {item.Name}
+                    </td>
+                    <td className="px-6 py-4 text-center">{item.Email}</td>
+                    <td className="px-6 py-4 text-center">{item.Phone}</td>
+                    <td className="px-6 py-4 text-center">{item.Role}</td>
+                    <td className="px-6 py-4 text-center">
+                      {dayjs(item.Created_At).format("DD/MM/YYYY")}
+                    </td>
+                    <td className="flex items-center gap-4 justify-center px-6 py-4">
+                      <span className="text-2xl text-indigo-500">
+                        <RiEditCircleFill />
+                      </span>
+                      <span className="text-2xl text-red-500">
+                        <IoIosRemoveCircle />
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {/* Pagination Part */}
+      <div className="flex justify-between items-center px-6 mt-4">
+        <div>
+          <p className="text-sm ml-1 text-gray-400">
+            <span className="text-[#1a1a1a] text-xs">
+              {filteredLaptops.length}{" "}
+            </span>{" "}
+            Users Registered
+          </p>
+        </div>
+        <div className=" flex items-center gap-2 mr-1">
+          <button
+            onClick={() => {}}
+            className="py-2 px-4 flex items-center gap-2 bg-[#8AAAE5] text-white rounded-md text-md"
+          >
+            <FaTrashAlt /> <span className="font-semibold">Trash</span>
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Rooms;
+export default AllUsers;

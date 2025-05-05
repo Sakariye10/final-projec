@@ -16,10 +16,13 @@ import {
   DialogTrigger,
 } from "../../components/ui/dialog";
 import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
+import toast from "react-hot-toast";
+import { newUsersFn, resetUserState } from "../../Redux/Dashboard/Users/NewUser";
 
 const AllUsers = () => {
   const AllUserState = useSelector((state: RootState) => state.AllUsers);
   const dispatch = useDispatch<AppDispatch>();
+  const toastId = 'userpage'
   useEffect(() => {
     dispatch(getAllUsersFn());
   }, []);
@@ -36,12 +39,39 @@ const AllUsers = () => {
   );
 
   // Registration Functions Starts Here
-  const NewUserState = useSelector((state : RootState) => state.NewUser)
+ // Creating New User Functions Startting In here 
+ const newUserState = useSelector((state : RootState) => state.NewUser)
 
-  const [Name , setName] = useState('')
-  const [Email , setEmail] = useState('')
-  const [Phone , setPhone] = useState('')
-  const [Password , setPassword] = useState('')
+ const [Name , setName] = useState('')
+ const [Phone , setPhone] = useState('')
+ const [Email , setEmail] = useState('')
+ const [Password  , setPassword] = useState('')
+
+ useEffect(() => {
+   if(newUserState.IsLoading){
+     toast.loading('Loading..' , { id : toastId})
+   }
+   if(newUserState.IsSuccess){
+     toast.success('New User Registered Successfully' , { id : toastId})
+      dispatch(getAllUsersFn())
+   }
+   if(newUserState.IsError){
+     toast.error(newUserState.E_message , { id : toastId})
+   }
+   dispatch(resetUserState())
+ },[newUserState])
+
+ const handleRegisterSubmit = () => {
+   const data = {
+     Name,
+     Phone,
+     Email,
+     Password 
+   }
+   dispatch(newUsersFn(data))
+ }
+
+
 
   return (
     <div>
@@ -67,7 +97,7 @@ const AllUsers = () => {
               <span className="text-lg font-bold">
                 <VscGitPullRequestNewChanges />
               </span>{" "}
-              New Users
+              New User
             </DialogTrigger>
             <DialogContent className="bg-white">
               <DialogHeader>
@@ -82,6 +112,8 @@ const AllUsers = () => {
                   <label className="text-sm font-semibold">Name</label>{" "}
                   <input
                     type="text"
+                    value={Name}
+                    onChange={(e) => setName(e.target.value)}
                     className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
@@ -90,7 +122,9 @@ const AllUsers = () => {
                     Phone
                   </label>{" "}
                   <input
-                    type="number"
+                    type="text"
+                    value={Phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
@@ -100,6 +134,8 @@ const AllUsers = () => {
                   </label>{" "}
                   <input
                     type="email"
+                    value={Email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
@@ -109,11 +145,13 @@ const AllUsers = () => {
                   </label>{" "}
                   <input
                     type="password"
+                    value={Password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
               </div>
-              <button className="w-full bg-indigo-500 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded-md text-white mt-2">
+              <button className="w-full bg-indigo-500 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded-md text-white mt-2" onClick={handleRegisterSubmit}>
                 <span className=" text-xl">
                   <IoIosAddCircle />
                 </span>{" "}

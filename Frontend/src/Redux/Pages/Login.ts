@@ -17,7 +17,7 @@ export const loginFn = createAsyncThunk(
     async( data:any , {rejectWithValue}) => {
         try {
             const res = await axios.post(`${Url}/user/login` , data)
-            return res.data
+            return res.data.result
         } catch (error) {
             if(error instanceof AxiosError)
             return rejectWithValue(error.response?.data.message || Err_Message)

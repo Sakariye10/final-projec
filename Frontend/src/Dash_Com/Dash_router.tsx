@@ -3,6 +3,7 @@ import Sidebar from './Sidebar'
 import { Outlet } from 'react-router-dom'
 
 const Dash_router = () => {
+  // if(localStorage.getItem)
   return (
     <div className=' w-full  h-screen flex bg-gray-100'>
         <div className='w-[16%] border-r border-gray-200'>

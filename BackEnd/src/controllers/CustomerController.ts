@@ -109,4 +109,106 @@ export const creatingCustomer = async ( req : customUserRequest , res : Response
     }
 }
 
+// Updating Customer Using by Its Id 
+export const updatingCustomer = async ( req : customUserRequest , res : Response) => {
+    try {
+        const {Cu_Id} = req.params
+        if(!Cu_Id){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'Provide Customer Id'
+            })
+            return
+        }
+        const {Cu_Name , Cu_Phone , Cu_Address } = req.body
+        if(!Cu_Name || !Cu_Phone){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'Provide Customer Credentials'
+            })
+            return
+        }
+        
+        // Checking If Customer Found Or Not 
+        const CheckCustomer = prisma.customers.findFirst({
+            where : {
+                Cu_Id : + Cu_Id
+            }
+        })
+        if(!CheckCustomer){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'This Cusomer Does not exits'
+            })
+            return
+        }
 
+        const Upadate_Customer = await prisma.customers.update({
+            where  : {
+                Cu_Id : + Cu_Id
+            },
+            data : {
+                Cu_Name,
+                Cu_Phone,
+                Cu_Address,
+            }
+        })
+
+        res.status(200).json({
+            IsSuccess : true,
+            message : 'Customer Updated Successfully',
+        })
+      
+    } catch (error) {
+        res.status(400).json({
+            IsSuccess : false,
+            message : 'Something Went Wrong Please Try Again Later'
+        })
+    }
+}
+
+
+// Deleted Customer 
+export const deletingCustomer = async ( req : customUserRequest , res : Response) => {
+    try {
+        const {Cu_Id} = req.params
+        if(!Cu_Id){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'Provide Customer Id To Delete'
+            })
+            return
+        }
+
+        // Checking Customer
+        const CheckCustomer = prisma.customers.findFirst({
+            where : {
+                Cu_Id : + Cu_Id
+            }
+        })
+        if(!CheckCustomer){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'This Cusomer Does not exits'
+            })
+            return
+        }
+
+        const deletedCustomer = await prisma.customers.delete({
+            where : {
+                Cu_Id : + Cu_Id
+            }
+        })
+
+        res.status(200).json({
+            IsSuccess : true,
+            message : 'Customer Deleted Successfully'
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            IsSuccess : false,
+            message : 'Somehting Went Wrong Please Try Again Later'
+        })
+    }
+}

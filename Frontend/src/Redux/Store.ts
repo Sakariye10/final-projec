@@ -2,16 +2,22 @@ import { configureStore } from '@reduxjs/toolkit'
 import { loginSlice } from './Pages/Login';
 import { getAllUsersSlice } from './Dashboard/Users/AllUsers';
 import { newUserSlice } from './Dashboard/Users/NewUser';
+import userInfoSlice from './Pages/UserInfo';
+import { getAllRoomTypesSlice } from './Dashboard/RoomType/AllRoomType';
 
 
 export const store = configureStore({
     reducer : {
         login : loginSlice.reducer,
+        userInfo : userInfoSlice.reducer,
 
         // Pages Endpoints Starts In Here 
         // User Endpoints
         AllUsers : getAllUsersSlice.reducer,
         NewUser : newUserSlice.reducer,
+
+        // RoomType Endpoints
+        AllRoomTypes : getAllRoomTypesSlice.reducer,
     }
 })
 

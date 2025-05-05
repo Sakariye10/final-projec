@@ -79,6 +79,7 @@ export const creatingRoomType = async ( req : customUserRequest , res : Response
                 IsSuccess : false,
                 message : 'Provide Valid Credentials'
             })
+            return
         }
 
         // Checking If Already Regeisteres 
@@ -94,6 +95,7 @@ export const creatingRoomType = async ( req : customUserRequest , res : Response
                 IsSuccess : false,
                 message : 'This Room Type Already Registered'
             })
+            return
         }
 
         const newRmType = await prisma.room_Type.create({

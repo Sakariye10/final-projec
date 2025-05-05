@@ -30,3 +30,85 @@ export const getAllRooms = async(req : customUserRequest , res : Response) => {
         })
     }
 }
+
+// Get One Romm 
+export const getOneRoom = async ( req : customUserRequest , res : Response) => {
+    try {
+        const { R_Id } = req.params
+        if(!R_Id){
+            res.status(400).json({
+                IsSuccess : false,
+                message : "Provide Valid Room Id "
+            })
+            return
+        }
+
+        const CheckRoom = await prisma.rooms.findFirst({
+            where : {
+                R_Id : + R_Id
+            }
+        })
+        if(!CheckRoom){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'This Room Is Not Found'
+            })
+            return 
+        }
+        res.status(200).json({
+            IsSuccess : true,
+            message : 'One room displayed Successfully',
+            result : CheckRoom
+        })
+    } catch (error) {
+        res.status(500).json({
+            IsSuccess : false,
+            message : 'Soemthign Went Wrong Please Try Again Later'
+        })
+    }
+}
+
+export const creatingRoom = async ( req : customUserRequest , res : Response) => {
+    try {
+        const {R_No , Rt_Id , F_Id} = req.body
+        if(!R_No ||  !Rt_Id || !F_Id){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'Provide Valid Room Credentails'
+            })
+            return
+        }
+        const CheckingRoom = prisma.rooms.findFirst({
+            where : {
+                R_No,
+                Rt_Id,
+                F_Id
+            }
+        })
+
+        if(!CheckingRoom){
+            res.status(400).json({
+                IsSuccess : false,
+                message : 'This Room Already Registered Successfuuly'
+            })
+            return
+        }
+        const newRoom = await prisma.rooms.create({
+            data : {
+                R_No,
+                F_Id,
+                Rt_Id
+            }
+        })
+
+        res.status(200).json({
+            IsSuccess : true,
+            message : 'New Room Registered Successfully'
+        })
+    } catch (error) {
+        res.status(500).json({
+            IsSuccess : false,
+            message : 'Soemthing Went Wrong Please Try Again Later'
+        })
+    }
+}
