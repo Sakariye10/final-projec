@@ -10,6 +10,9 @@ export const getAllRooms = async(req : customUserRequest , res : Response) => {
         const AllRooms = await prisma.rooms.findMany({
             where : {
                 Is_Deleted : false
+            },
+            include : {
+                R_Type : true
             }
         })
         if(!AllRooms){
@@ -68,7 +71,7 @@ export const getOneRoom = async ( req : customUserRequest , res : Response) => {
     }
 }
 
-export const creatingRoom = async ( req : customUserRequest , res : Response) => {
+export const creatingNewRoom = async ( req : customUserRequest , res : Response) => {
     try {
         const {R_No , Rt_Id , F_Id} = req.body
         if(!R_No ||  !Rt_Id || !F_Id){

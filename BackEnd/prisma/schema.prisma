@@ -77,6 +77,7 @@ model Rooms {
   R_No       String
   Rt_Id      Int
   F_Id       Int
+  Is_Booked Boolean @default(false)
   Is_Deleted Boolean   @default(false)
   Created_At DateTime  @default(now())
   Updated_At DateTime  @updatedAt
@@ -97,6 +98,7 @@ model Booking {
   Paid       Int
   Balance    Int
   Us_Id      Int
+  Is_Deleted Boolean @default(false)
   Created_At DateTime @default(now())
   Updated_At DateTime @updatedAt
 
@@ -137,7 +139,7 @@ model Debts {
   D_Id       Int      @id @default(autoincrement())
   Cu_Name    String
   Cu_Phone   String
-  Balance    String
+  Balance    Int
   Author_Id  Int
   Is_Deleted Boolean  @default(false)
   Created_At DateTime @default(now())

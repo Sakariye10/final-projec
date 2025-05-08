@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { decodeToken } from "../helpers/jwt";
-import { getAllRooms ,  } from "../controllers/RoomsController";
+import { creatingNewRoom, getAllRooms ,  } from "../controllers/RoomsController";
 
 const router = Router();
 
 router.get('/all' , decodeToken , getAllRooms)
-router.post('/mew' , decodeToken , creatingRoom)
+router.post('/new' , decodeToken , creatingNewRoom)
 
 export default router

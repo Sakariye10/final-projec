@@ -18,24 +18,25 @@ import {
 import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
 import toast from "react-hot-toast";
 import { newUsersFn } from "../../Redux/Dashboard/Users/NewUser";
+import { getAllRoomsFn } from "../../Redux/Dashboard/Rooms/AllRooms";
 
 const AllUsers = () => {
-  const AllUserState = useSelector((state: RootState) => state.AllUsers);
+  const AllRoomsData = useSelector((state: RootState) => state.AllRoom);
   const dispatch = useDispatch<AppDispatch>();
   const toastId = 'userpage'
   useEffect(() => {
-    dispatch(getAllUsersFn());
+    dispatch(getAllRoomsFn());
   }, []);
 
   // Use State Functions Starts Here
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filtered laptops based on search term by name, price, or core
-  const filteredLaptops = AllUserState?.data?.filter(
+  const filteredLaptops = AllRoomsData?.data?.filter(
     (item) =>
-      item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.Email.toString().includes(searchTerm) ||
-      item.Role.toLowerCase().includes(searchTerm.toLowerCase())
+      item.R_Id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.R_No.toString().includes(searchTerm) ||
+      item.F_Id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Registration Functions Starts Here
@@ -181,16 +182,19 @@ const AllUsers = () => {
                     Id
                   </th>
                   <th scope="col" className="px-6 py-1 text-left">
-                    Name
+                    No
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Email
+                    Type
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Phone
+                    Price / Night
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Role
+                    No - Beds
+                  </th>
+                  <th scope="col" className="px-6 py-1 text-center">
+                    Is Booked
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
                     Registered
@@ -217,17 +221,24 @@ const AllUsers = () => {
                       scope="row"
                       className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap"
                     >
-                      {item.U_Id}
+                      {item.R_Id}
                     </td>
                     <td
                       scope="row"
                       className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap"
                     >
-                      {item.Name}
+                      {item.R_No}
                     </td>
-                    <td className="px-6 py-4 text-center">{item.Email}</td>
-                    <td className="px-6 py-4 text-center">{item.Phone}</td>
-                    <td className="px-6 py-4 text-center">{item.Role}</td>
+                    <td className="px-6 py-4 text-center">{item.R_Type.Rt_Name}</td>
+                    <td className="px-6 py-4 text-center">{item.R_Type.Rt_Price}</td>
+                    <td className="px-6 py-4 text-center">{item.R_Type.No_Beds}</td>
+                    <td className="flex items-center gap-4 justify-center px-6 py-4">
+                        {item.Is_Booked === false ? (
+                          <button className='bg-green-500 py-1 px-4 rounded-md text-white font-medium'>Pay</button>
+                        ) : (
+                          <button className='bg-[#6997FF] py-1 px-4 rounded-md text-white font-medium'>Paid</button>
+                        )}
+                      </td>
                     <td className="px-6 py-4 text-center">
                       {dayjs(item.Created_At).format("DD/MM/YYYY")}
                     </td>
@@ -253,7 +264,7 @@ const AllUsers = () => {
             <span className="text-[#1a1a1a] text-xs">
               {filteredLaptops.length}{" "}
             </span>{" "}
-            Users Registered
+            Rooms Registered
           </p>
         </div>
         <div className=" flex items-center gap-2 mr-1">

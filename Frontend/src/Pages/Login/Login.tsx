@@ -44,11 +44,14 @@ const Login = () => {
   
   return (
     <div className="flex items-center bg-[#cecece] justify-center h-screen">
-      <form className="bg-white w-[30%] h-[50vh] rounded-2xl p-4">
-        <h2 className="font-bold text-xl text-left ml-4 text-slate-700 ">
+      <form className="bg-white w-[30%] h-[55vh] rounded-2xl p-4">
+      <div className="flex items-center justify-center w-full h-[100px]">
+        <img src="./images/logo/Catlive.svg" alt="" />
+      </div>
+        <h2 className="font-bold text-xl mb-4 text-center ml-4 text-slate-700 ">
           Sign In
         </h2>
-        <p className="text-xs  mt-1 text-gray-400 ml-4">
+        <p className="text-xs text-center  mt-1 text-gray-400 ml-4">
           Please provide valid user credentails
         </p>
         {/* Email Input */}
@@ -76,7 +79,7 @@ const Login = () => {
             className="bg-gray-50 border mt-2 border-gray-300 text-gray-900 text-xs rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
           />
         </div>
-        <button className="w-[96%] py-2 rounded font-bold hover:scale-95 duration-500 transition-all text-sm ml-4 mt-4 bg-slate-700 text-white" onClick={handleSubmit}>
+        <button className="w-[96%] py-2 rounded font-bold hover:scale-95 duration-500 transition-all text-sm ml-4 mt-6 bg-slate-700 text-white" onClick={handleSubmit}>
           Login
         </button>
         <p className="ml-4 mt-12 text-xs">

@@ -4,6 +4,7 @@ import { getAllUsersSlice } from './Dashboard/Users/AllUsers';
 import { newUserSlice } from './Dashboard/Users/NewUser';
 import userInfoSlice from './Pages/UserInfo';
 import { getAllRoomTypesSlice } from './Dashboard/RoomType/AllRoomType';
+import { getAllRoomsSlice } from './Dashboard/Rooms/AllRooms';
 
 
 export const store = configureStore({
@@ -18,6 +19,10 @@ export const store = configureStore({
 
         // RoomType Endpoints
         AllRoomTypes : getAllRoomTypesSlice.reducer,
+
+
+        // Room Endpoints
+        AllRoom : getAllRoomsSlice.reducer,
     }
 })
 
