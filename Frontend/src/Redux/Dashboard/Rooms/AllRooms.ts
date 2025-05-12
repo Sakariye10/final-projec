@@ -39,7 +39,7 @@ export const getAllRoomsFn = createAsyncThunk(
   "All rooms",
   async (_, { rejectWithValue }) => {
     try {
-      const Token = JSON.parse(localStorage.getItem("userDetail")!).token;
+      const Token = JSON.parse(localStorage.getItem("userInfo")!).token;
       const res = await axios.get<roomsResponse>(`${Url}/rooms/all`, {
         headers: {
           Authorization: `Bearer ${Token}`,

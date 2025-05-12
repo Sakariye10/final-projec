@@ -29,7 +29,12 @@ export const getAllRoomTypesFn = createAsyncThunk(
   "RoomType",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get<roomType>(`${Url}/roomtype/all`);
+      const Token = JSON.parse(localStorage.getItem("userInfo")!).token;
+      const res = await axios.get<roomType>(`${Url}/roomtype/all` , {
+        headers : {
+          Authorization : `Bearer ${Token}`
+        }
+      });
       return res.data.result
     } catch (error) {
       if (error instanceof AxiosError)

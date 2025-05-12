@@ -5,6 +5,12 @@ import { newUserSlice } from './Dashboard/Users/NewUser';
 import userInfoSlice from './Pages/UserInfo';
 import { getAllRoomTypesSlice } from './Dashboard/RoomType/AllRoomType';
 import { getAllRoomsSlice } from './Dashboard/Rooms/AllRooms';
+import { getAllfloorsSlice } from './Dashboard/Floor/AllFloor';
+import { newFloorSlice } from './Dashboard/Floor/NewFloor';
+import { newRoomTypeSlice } from './Dashboard/RoomType/NewRoomType';
+import { getAllBookingSlice } from './Dashboard/Booking/AllBooking';
+import { getAllCustomerSlice } from './Dashboard/Customer/AllCustomer';
+import { newRoomSlice } from './Dashboard/Rooms/NewRoom';
 
 
 export const store = configureStore({
@@ -17,12 +23,23 @@ export const store = configureStore({
         AllUsers : getAllUsersSlice.reducer,
         NewUser : newUserSlice.reducer,
 
+        // Floor Endpoints
+        AllFloor : getAllfloorsSlice.reducer,
+        NewFloor : newFloorSlice.reducer,
+
         // RoomType Endpoints
         AllRoomTypes : getAllRoomTypesSlice.reducer,
-
+        NewRoomType : newRoomTypeSlice.reducer,
 
         // Room Endpoints
         AllRoom : getAllRoomsSlice.reducer,
+        NewRoom : newRoomSlice.reducer,
+
+        // Booking Endpoints
+        AllBookings : getAllBookingSlice.reducer,
+
+        // Customer Endpoints 
+        AllCustomer : getAllCustomerSlice.reducer,
     }
 })
 

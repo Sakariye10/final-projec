@@ -7,6 +7,8 @@ import { loginFn, resetLoginState } from "../../Redux/Pages/Login";
 import { setUser } from "../../Redux/Pages/UserInfo";
 import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
 import { newUsersFn } from "../../Redux/Dashboard/Users/NewUser";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
 
 const Login = () => {
   const loginState = useSelector((state: RootState) => state.login);
@@ -21,15 +23,15 @@ const Login = () => {
     toast.loading('Loading...' , {id : toastId})
   if(loginState.IsSuccess){
     //@ts-ignore
-    const {Name , U_Id , Email , Phone , Role} = loginState.data
-    dispatch(setUser({Name , Email , U_Id , Role , Phone}))
+    const { Name , Id , Email , Phone , token} = loginState?.data
+    dispatch(setUser({Name , Email , Id , token , Phone}))
     toast.success('User Logged Successfully' , { id : toastId})
     navigate('/dashboard')
   }
   if(loginState.IsError){
     toast.error(loginState.E_message , { id : toastId})
-    dispatch(resetLoginState())
   }
+  dispatch(resetLoginState())
   }, [loginState]);
 
   const handleSubmit = (e : React.FormEvent) => {
@@ -41,58 +43,45 @@ const Login = () => {
     dispatch(loginFn(data))
   };
 
-  
   return (
-    <div className="flex items-center bg-[#cecece] justify-center h-screen">
-      <form className="bg-white w-[30%] h-[55vh] rounded-2xl p-4">
-      <div className="flex items-center justify-center w-full h-[100px]">
-        <img src="./images/logo/Catlive.svg" alt="" />
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+      <div className="h-full lg:flex flex-col items-center justify-center px-4">
+        <div className="text-left space-y-4 pt-16 w-[55%]">
+          <h1 className="font-bold text-xl text-slate-600">Welcome Back!</h1>
+          <p className="text-xs text-[#7e8ca0]">
+            Log in or Create account to get back your dashboard.
+          </p>
+        </div>
+        <div className="flex items-center justify-center mt-8 w-full">
+          {/* Google and Facebook  */}
+          <div className="w-[55%] grid grid-cols-2 gap-6 ">
+            <button className="bg-gray-50 border border-gray-50 py-2 px-6 font-medium flex justify-center items-center gap-4">
+              {" "}
+              <FcGoogle /> Google
+            </button>
+            <button className="bg-gray-50 border border-gray-50 py-2 px-6 font-medium flex justify-center items-center gap-4">
+              {" "}
+              <FaFacebook /> Facebook
+            </button>
+          </div>
+        </div>
+          {/* Inputs Starts In Here  */}
+          <div className="w-[55%] mt-6 flex flex-col ">
+          <label className="text-sm  text-left space-y-4 font-medium text-slate-600"> Email</label>
+          <input type="text" id="first_name" className="bg-gray-50 border mt-2 border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your email" required value={Email} onChange={(e) => setEmail(e.target.value)} />
+          <label className="text-sm  text-left space-y-4 font-medium text-slate-600 mt-3"> Password</label>
+          <input type="password" id="first_name" className="bg-gray-50 border mt-2 border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your password" required value={Password} onChange={(e) => setPassword(e.target.value)} />
+          <button className="w-full  mt-6 bg-blue-600 text-white hover:bg-blue-700 duration-500 py-2.5 rounded font-sans font-semibold" onClick={handleSubmit}>Login</button>
+          </div>
       </div>
-        <h2 className="font-bold text-xl mb-4 text-center ml-4 text-slate-700 ">
-          Sign In
-        </h2>
-        <p className="text-xs text-center  mt-1 text-gray-400 ml-4">
-          Please provide valid user credentails
-        </p>
-        {/* Email Input */}
-        <div className="grid mt-12 ml-4 ">
-          <label htmlFor="Email" className="text-xs text-slate-800 font-medium">
-            Email
-          </label>
-          <input
-            type="text"
-            value={Email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="bg-gray-50 border mt-2 border-gray-300 text-gray-900 text-xs rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
-          />
-        </div>
-        <div className="grid mt-2 ml-4 ">
-          <label htmlFor="Email" className="text-xs text-slate-800 font-medium">
-            Password
-          </label>
-          <input
-            type="password"
-            value={Password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-            className="bg-gray-50 border mt-2 border-gray-300 text-gray-900 text-xs rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
-          />
-        </div>
-        <button className="w-[96%] py-2 rounded font-bold hover:scale-95 duration-500 transition-all text-sm ml-4 mt-6 bg-slate-700 text-white" onClick={handleSubmit}>
-          Login
-        </button>
-        <p className="ml-4 mt-12 text-xs">
-          If you haven't account sign up in{" "}
-          <span
-            className="underline text-slate-500"
-            onClick={() => navigate("/register")}
-          >
-            {" "}
-            Here!
-          </span>
-        </p>
-      </form>
+      <div className="h-full bg-blue-600 hidden lg:flex items-center justify-center">
+        <img
+          src="./images/logo/logo.svg"
+          alt="logo"
+          width={100}
+          height={100}
+        />
+      </div>
     </div>
   );
 };

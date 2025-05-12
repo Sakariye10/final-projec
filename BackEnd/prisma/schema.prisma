@@ -50,7 +50,7 @@ model Hotel {
 model Floor {
   F_Id       Int      @id @default(autoincrement())
   F_No       String
-  No_Rooms   Int
+  No_Rooms   String
   Author_Id  Int
   Is_Deleted Boolean  @default(false)
   Created_At DateTime @default(now())

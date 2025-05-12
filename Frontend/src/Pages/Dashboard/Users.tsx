@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
 import { IoFilterSharp } from "react-icons/io5";
-import { RiEditCircleFill } from "react-icons/ri";
+import { FiEdit2 } from "react-icons/fi";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../Redux/Store";
@@ -18,6 +18,7 @@ import {
 import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
 import toast from "react-hot-toast";
 import { newUsersFn, resetUserState } from "../../Redux/Dashboard/Users/NewUser";
+import { MdDeleteOutline } from "react-icons/md";
 
 const AllUsers = () => {
   const AllUserState = useSelector((state: RootState) => state.AllUsers);
@@ -31,11 +32,12 @@ const AllUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filtered laptops based on search term by name, price, or core
-  const filteredLaptops = AllUserState?.data?.filter(
+  const filteredUsers = AllUserState?.data?.filter(
     (item) =>
       item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.Email.toString().includes(searchTerm) ||
-      item.Role.toLowerCase().includes(searchTerm.toLowerCase())
+      item.Role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Phone.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Registration Functions Starts Here
@@ -78,7 +80,7 @@ const AllUsers = () => {
       {/* Top Part */}
       <div className="flex justify-between px-6 mt-3 items-center">
         <div className="ml-4">
-          <h2 className="text-lg font-semibold text-gray-400 font-[Roboto]">
+          <h2 className="text-lg font-bold text-white">
             {" "}
             All Users Data
           </h2>
@@ -87,14 +89,14 @@ const AllUsers = () => {
         <div className="flex items-center justify-center mr-1 gap-4">
           <input
             type="text"
-            className="px-3 py-3 text-center shadow-md bg-white rounded-md text-sm"
+            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-sm"
             placeholder="Search Here"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Dialog>
-            <DialogTrigger className="bg-indigo-500 text-white px-4 py-2 font-serif rounded-md font-semibold flex items-center gap-2">
-              <span className="text-lg font-bold">
+            <DialogTrigger className="bg-white/20 text-white duration-500 transition-all text-sm px-4 py-2  rounded font-medium flex items-center gap-2">
+              <span className="text-md font-bold">
                 <VscGitPullRequestNewChanges />
               </span>{" "}
               New User
@@ -114,7 +116,7 @@ const AllUsers = () => {
                     type="text"
                     value={Name}
                     onChange={(e) => setName(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -125,7 +127,7 @@ const AllUsers = () => {
                     type="text"
                     value={Phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -136,7 +138,7 @@ const AllUsers = () => {
                     type="email"
                     value={Email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -147,15 +149,15 @@ const AllUsers = () => {
                     type="password"
                     value={Password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
               </div>
-              <button className="w-full bg-indigo-500 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded-md text-white mt-2" onClick={handleRegisterSubmit}>
-                <span className=" text-xl">
+              <button className="w-full bg-blue-500 flex justify-center items-center gap-2 text-sm hover:shadow-lg font-semibold py-3 rounded text-white mt-2" onClick={handleRegisterSubmit}>
+                <span className=" text-lg">
                   <IoIosAddCircle />
                 </span>{" "}
-                Register User
+                Add User
               </button>
             </DialogContent>
           </Dialog>
@@ -163,12 +165,12 @@ const AllUsers = () => {
       </div>
       {/* Table Part */}
       <div className=" px-6 mt-6  ">
-        <div className="bg-white h-[81vh] rounded-2xl pt-3">
-          <div className="w-[98%] mx-auto mt-2">
+        <div className="bg-white h-[88vh] rounded">
+          <div className="w-full mx-auto">
             <table className="w-full text-sm text-left rtl:text-right ">
-              <thead className="text-xs text-gray-700  bg-[#F2F7FB] shadow-md rounded-lg">
+              <thead className="text-xs text-white  bg-blue-500  rounded-t shadow-md rounded-lg">
                 <tr>
-                  <th scope="col" className="px-4 py-2.5">
+                  <th scope="col" className="px-4 py-3">
                     <div className="flex items-center">
                       <input
                         id="checkbox-all-search"
@@ -202,8 +204,8 @@ const AllUsers = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredLaptops?.map((item, id) => (
-                  <tr className="bg-white border-b" key={id}>
+                {filteredUsers?.map((item, id) => (
+                  <tr className="border-t text-slate-00 border-gray-100" key={id}>
                     <td className="w-4 p-4">
                       <div className="flex items-center">
                         <input
@@ -216,13 +218,13 @@ const AllUsers = () => {
                     </td>
                     <td
                       scope="row"
-                      className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap"
+                      className="px-6 py-4 text-left whitespace-nowrap"
                     >
                       {item.U_Id}
                     </td>
                     <td
                       scope="row"
-                      className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap"
+                      className="px-6 py-4 text-left whitespace-nowrap"
                     >
                       {item.Name}
                     </td>
@@ -233,11 +235,11 @@ const AllUsers = () => {
                       {dayjs(item.Created_At).format("DD/MM/YYYY")}
                     </td>
                     <td className="flex items-center gap-4 justify-center px-6 py-4">
-                      <span className="text-2xl text-indigo-500">
-                        <RiEditCircleFill />
+                      <span className="text-md text-blue-500">
+                      <FiEdit2 />
                       </span>
-                      <span className="text-2xl text-red-500">
-                        <IoIosRemoveCircle />
+                      <span className="text-lg text-red-500">
+                      <MdDeleteOutline />
                       </span>
                     </td>
                   </tr>
@@ -245,25 +247,6 @@ const AllUsers = () => {
               </tbody>
             </table>
           </div>
-        </div>
-      </div>
-      {/* Pagination Part */}
-      <div className="flex justify-between items-center px-6 mt-4">
-        <div>
-          <p className="text-sm ml-1 text-gray-400">
-            <span className="text-[#1a1a1a] text-xs">
-              {filteredLaptops.length}{" "}
-            </span>{" "}
-            Users Registered
-          </p>
-        </div>
-        <div className=" flex items-center gap-2 mr-1">
-          <button
-            onClick={() => {}}
-            className="py-2 px-4 flex items-center gap-2 bg-[#8AAAE5] text-white rounded-md text-md"
-          >
-            <FaTrashAlt /> <span className="font-semibold">Trash</span>
-          </button>
         </div>
       </div>
     </div>

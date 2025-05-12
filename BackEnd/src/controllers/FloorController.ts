@@ -86,6 +86,7 @@ export const creatingFloor = async (req: customUserRequest, res: Response) => {
         IsSuccess: false,
         message: "This Floor Is Already Registered",
       });
+      return
     }
 
     const newFloor = await prisma.floor.create({
@@ -315,3 +316,28 @@ export const deletingFloor = async (req: customUserRequest, res: Response) => {
     });
   }
 };
+
+
+// Deleting All Floors 
+export const deletingAllFloors = async( req : customUserRequest , res : Response) => {
+  try {
+    const AllFloors = await prisma.floor.deleteMany()
+    if(!AllFloors){
+      res.status(400).json({
+        IsSuccess : false,
+        message : 'There Is No Floors'
+      })
+      return
+    }
+    res.status(200).json({
+      IsSuccess : false,
+      message : 'All Floors Are Deleted At The Same Time'
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      IsSuccess : false,
+      message : 'Something Went Wrong'
+    })
+  }
+}

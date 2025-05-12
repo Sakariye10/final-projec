@@ -6,6 +6,10 @@ import Dash_router from '../Dash_Com/Dash_router'
 import Main from '../Pages/Dashboard/Main'
 import Rooms from '../Pages/Dashboard/Rooms'
 import AllUsers from '../Pages/Dashboard/Users'
+import RoomTyepe from '../Pages/Dashboard/RoomType'
+import FloorPage from '../Pages/Dashboard/FloorPage'
+import Booking from '../Pages/Dashboard/Booking'
+import Customer from '../Pages/Dashboard/Customer'
 
 const Router = () => {
   return (
@@ -53,6 +57,22 @@ export const router = createBrowserRouter([
             {
                 path : 'users',
                 element : <AllUsers />
+            },
+            {
+                path : 'roomtype',
+                element : <RoomTyepe/>
+            },
+            {
+                path : 'floor',
+                element : <FloorPage />
+            },
+            {
+                path : 'booking',
+                element : <Booking />
+            },
+            {
+                path : 'customer',
+                element : <Customer />
             }
         ]
     }
