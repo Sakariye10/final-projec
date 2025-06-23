@@ -4,9 +4,9 @@ import { Url , Err_Message } from "../../../Interfaces";
 
 
 const initialState = {
-    IsLoading : true,
-    IsSuccess : true,
-    IsError : true,
+    IsLoading : false,
+    IsSuccess : false,
+    IsError : false,
     E_message : '',
     data : {}
 }

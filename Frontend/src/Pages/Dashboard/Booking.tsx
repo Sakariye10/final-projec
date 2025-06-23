@@ -8,19 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../Redux/Store";
 import dayjs from "dayjs";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuPortal,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger,
-  } from "../../components/ui/dropdown-menu"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -31,15 +31,21 @@ import {
 } from "../../components/ui/dialog";
 import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
 import toast from "react-hot-toast";
-import { newUsersFn, resetUserState } from "../../Redux/Dashboard/Users/NewUser";
+import {
+  newUsersFn,
+  resetUserState,
+} from "../../Redux/Dashboard/Users/NewUser";
 import { Button } from "../../components/ui/button";
 import { TbMenu3 } from "react-icons/tb";
 import { getAllBookingFn } from "../../Redux/Dashboard/Booking/AllBooking";
+import { getAllRoomsFn } from "../../Redux/Dashboard/Rooms/AllRooms";
+import { newBookingFn } from "../../Redux/Dashboard/Booking/NewBooking";
+import { getOneRoomFn } from "../../Redux/Dashboard/Rooms/GetOneRoom";
 
 const AllUsers = () => {
   const AllUserState = useSelector((state: RootState) => state.AllBookings);
   const dispatch = useDispatch<AppDispatch>();
-  const toastId = 'userpage'
+  const toastId = "userpage";
   useEffect(() => {
     dispatch(getAllBookingFn());
   }, []);
@@ -55,38 +61,51 @@ const AllUsers = () => {
       item.R_Id.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Registration Functions Starts Here
- // Creating New User Functions Startting In here 
- const newUserState = useSelector((state : RootState) => state.NewUser)
+  //  All Rooms Data Emplained
+  const AllRoomsData = useSelector((state: RootState) => state.AllRoom);
+  useEffect(() => {
+    dispatch(getAllRoomsFn());
+  }, []);
 
- const [Name , setName] = useState('')
- const [Phone , setPhone] = useState('')
- const [Email , setEmail] = useState('')
- const [Password  , setPassword] = useState('')
+  const filteredRoooms = AllRoomsData.data.filter(
+    (item) => 
+      item.Is_Booked === true
+  )
 
- useEffect(() => {
-   if(newUserState.IsLoading){
-     toast.loading('Loading..' , { id : toastId})
-   }
-   if(newUserState.IsSuccess){
-     toast.success('New User Registered Successfully' , { id : toastId})
-      dispatch(getAllUsersFn())
-   }
-   if(newUserState.IsError){
-     toast.error(newUserState.E_message , { id : toastId})
-   }
-   dispatch(resetUserState())
- },[newUserState])
+  // New Booking Registration Function Starts In Here
+  const newBookingState = useSelector((state: RootState) => state.NewBooking);
+  const [Cu_Name, setCu_Name] = useState("");
+  const [Cu_Phone, setCu_Phone] = useState("");
+  const [R_Id, setR_Id] = useState("");
+  const [B_Days, setB_Days] = useState("");
+  const [Paid, setPaid] = useState("");
 
- const handleRegisterSubmit = () => {
-   const data = {
-     Name,
-     Phone,
-     Email,
-     Password 
-   }
-   dispatch(newUsersFn(data))
- }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const data = {};
+    dispatch(newBookingFn(data));
+  };
+
+  // Loading Room Price
+const OneRoomState = useSelector((state: RootState) => state.OneRoom);
+
+useEffect(() => {
+  if (R_Id) {
+    dispatch(getOneRoomFn(R_Id));
+  }
+}, [R_Id]); // Dependency should be R_Id (not empty)
+
+const Price = OneRoomState?.data?.R_Type?.Rt_Price
+//@ts-ignore
+const [Total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (Price && B_Days) {
+      setTotal(Price * B_Days);
+    }
+  }, [Price, B_Days]);
+
 
 
 
@@ -95,10 +114,7 @@ const AllUsers = () => {
       {/* Top Part */}
       <div className="flex justify-between px-6 mt-3 items-center">
         <div className="ml-4">
-          <h2 className="text-lg font-bold text-white">
-            {" "}
-            All Booking Data
-          </h2>
+          <h2 className="text-lg font-bold text-white"> All Booking Data</h2>
         </div>
         {/* Dialog Part Starts Here */}
         <div className="flex items-center justify-center mr-1 gap-4">
@@ -118,61 +134,107 @@ const AllUsers = () => {
             </DialogTrigger>
             <DialogContent className="bg-white">
               <DialogHeader>
-                <DialogTitle>Adding New Booking</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-blue-500">
+                  Adding New Booking
+                </DialogTitle>
+                <DialogDescription className="text-xs font-medium">
                   Make sure data that you entered in this dialog registration.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid grid-cols-1 gap-4 mt-2">
+              <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-semibold">Name</label>{" "}
+                  <label className="text-sm font-medium">Name</label>{" "}
                   <input
                     type="text"
-                    value={Name}
-                    onChange={(e) => setName(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    value={Cu_Name}
+                    onChange={(e) => setCu_Name(e.target.value)}
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="Color" className="text-sm font-semibold">
-                    Phone
+                  {" "}
+                  <label className="text-sm font-medium">Phone</label>{" "}
+                  <input
+                    type="text"
+                    value={Cu_Phone}
+                    onChange={(e) => setCu_Phone(e.target.value)}
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  {" "}
+                  <label className="text-sm font-medium">Room Id</label>{" "}
+                  <select className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                  value={R_Id}
+                 onChange={(e) => setR_Id(e.target.value)}
+                  >
+                    <option selected>Choose Room No</option>
+                    {filteredRoooms.map((item, idx) => (
+                      <option value={item.R_Id}>{item.R_No}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  {" "}
+                  <label className="text-sm font-medium text-blue-500">
+                    Price
                   </label>{" "}
                   <input
                     type="text"
-                    value={Phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    value={Price ? Price : 0}
+                   readOnly
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="Color" className="text-sm font-semibold">
-                    Email
+                  {" "}
+                  <label className="text-sm font-medium">
+                    Booking Days
                   </label>{" "}
                   <input
-                    type="email"
-                    value={Email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    type="text"
+                    value={B_Days}
+                    onChange={(e) => setB_Days(e.target.value)}
+                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="Color" className="text-sm font-semibold">
-                    Password
+                  {" "}
+                  <label className="text-sm font-medium text-blue-500">
+                    Total
                   </label>{" "}
                   <input
-                    type="password"
-                    value={Password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className='"flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    type="text"
+                    value={Total}
+                    readOnly
+                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  {" "}
+                  <label className="text-sm font-medium">Paid</label>{" "}
+                  <input
+                    type="text"
+                    value={Paid}
+                    onChange={(e) => setPaid(e.target.value)}
+                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  {" "}
+                  <label className="text-sm font-medium text-blue-500 ">
+                    Balance
+                  </label>{" "}
+                  <input
+                    type="text"
+                    readOnly
+                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
               </div>
-              <button className="w-full bg-indigo-500 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded-md text-white mt-2" onClick={handleRegisterSubmit}>
-                <span className=" text-xl">
-                  <IoIosAddCircle />
-                </span>{" "}
-                Register User
+              <button className="w-full bg-blue-500 flex justify-center items-center gap-2 text-sm hover:shadow-lg font-semibold py-3 rounded text-white mt-2">
+                Book now
               </button>
             </DialogContent>
           </Dialog>
@@ -205,22 +267,22 @@ const AllUsers = () => {
                     No
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Type 
+                    Type
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Price 
+                    Price
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    R * Days 
+                    R * Days
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Total 
+                    Total
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Paid 
+                    Paid
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
-                    Balance 
+                    Balance
                   </th>
                   <th scope="col" className="px-6 py-1 text-center">
                     Registered
@@ -256,7 +318,9 @@ const AllUsers = () => {
                       {item.Cu_Phone}
                     </td>
                     <td className="px-6 py-4 text-center">{item.Room.R_No}</td>
-                    <td className="px-6 py-4 text-center">{item.Room.R_Type.Rt_Name}</td>
+                    <td className="px-6 py-4 text-center">
+                      {item.Room.R_Type.Rt_Name}
+                    </td>
                     <td className="px-6 py-4 text-center">{item.Price}</td>
                     <td className="px-6 py-4 text-center">{item.B_Days}</td>
                     <td className="px-6 py-4 text-center">{item.Total}</td>
@@ -266,24 +330,36 @@ const AllUsers = () => {
                       {dayjs(item.Created_At).format("DD/MM/YYYY")}
                     </td>
                     <td className="flex items-center gap-4 justify-center px-6 py-4">
-                    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="bg-blue-500 text-white p-1.5 rounded-full font-bold hover:bg-white hover:border hover:border-indigo-600 hover:text-indigo-600 duration-500 transition-all hover:font-bold">
-      <TbMenu3 />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-30">
-        <DropdownMenuLabel className="text-center text-blue-500">My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-         <span className=" ml-3 font-semibold text-green-500">Edit</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="w-full" />
-        <DropdownMenuItem>
-         <span className=" ml-3 font-semibold text-red-500">Delete</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="bg-blue-500 text-white p-1.5 rounded-full font-bold hover:bg-white hover:border hover:border-indigo-600 hover:text-indigo-600 duration-500 transition-all hover:font-bold">
+                            <TbMenu3 />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-30">
+                          <DropdownMenuLabel className="text-center text-blue-500">
+                            More Details
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-orange-500">
+                              Preview
+                            </span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="w-full" />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-green-500">
+                              Edit
+                            </span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="w-full" />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-red-500">
+                              Delete
+                            </span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 ))}

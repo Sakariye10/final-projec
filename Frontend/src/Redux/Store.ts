@@ -11,6 +11,8 @@ import { newRoomTypeSlice } from './Dashboard/RoomType/NewRoomType';
 import { getAllBookingSlice } from './Dashboard/Booking/AllBooking';
 import { getAllCustomerSlice } from './Dashboard/Customer/AllCustomer';
 import { newRoomSlice } from './Dashboard/Rooms/NewRoom';
+import { newBookingSlice } from './Dashboard/Booking/NewBooking';
+import { getOneRoomSlice } from './Dashboard/Rooms/GetOneRoom';
 
 
 export const store = configureStore({
@@ -34,9 +36,11 @@ export const store = configureStore({
         // Room Endpoints
         AllRoom : getAllRoomsSlice.reducer,
         NewRoom : newRoomSlice.reducer,
+        OneRoom : getOneRoomSlice.reducer,
 
         // Booking Endpoints
         AllBookings : getAllBookingSlice.reducer,
+        NewBooking : newBookingSlice.reducer,
 
         // Customer Endpoints 
         AllCustomer : getAllCustomerSlice.reducer,

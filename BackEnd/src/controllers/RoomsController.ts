@@ -49,6 +49,9 @@ export const getOneRoom = async ( req : customUserRequest , res : Response) => {
         const CheckRoom = await prisma.rooms.findFirst({
             where : {
                 R_Id : + R_Id
+            },
+            include : {
+                R_Type : true
             }
         })
         if(!CheckRoom){

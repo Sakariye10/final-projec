@@ -18,26 +18,26 @@ const Sidebar = () => {
     const navigate = useNavigate();
   return (
     <div className=''>
-        <h2 className='text-center mt-2 font-semibold text-blue-800 font-serif'>Maareeye Hotel</h2>
-        <h3 className='text-sm text-gray-400 mt-8 ml-4'>Menu</h3>
-        <ul className='mt-5  justify-center grid gap-8'>
-            <li className='flex gap-4 items-center text-sm text-blue-500' onClick={() => navigate('/dashboard')}><span><RxDashboard /></span>  <span>Dashboard</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900' onClick={() => navigate('/dashboard/users')}><span><FaUserGroup /></span>  <span>Users</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900' onClick={() => navigate('/dashboard/floor')}><span><MdOutlineDensitySmall /></span>  <span>Floor</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900' onClick={() => navigate('/dashboard/rooms')}><span><LiaBedSolid /></span>  <span>Rooms</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900' onClick={() => navigate('/dashboard/roomtype')}><span><MdRoomService /></span>  <span>Roomtype</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900' onClick={() => navigate('/dashboard/customer')}><span><RiCustomerServiceFill /></span>  <span>Customer</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900' onClick={() => navigate('/dashboard/booking')}><span><TbBrandBooking /></span>  <span>Booking</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900'><span><FcDebt /></span>  <span>Debts</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900'><span><GiPayMoney /></span>  <span>Payment</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900'><span><GiExpense /></span>  <span>Expense</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900'><span><TbReportMoney /></span>  <span>Reports</span> </li>
+        <h2 className='text-center mt-2 font-semibold text-blue-800 font-serif'>Nugaal Hotel</h2>
+        <h3 className='text-sm text-gray-400 font-semibold mt-8 ml-4'>Menu</h3>
+        <ul className='mt-5  justify-center grid gap-10'>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-blue-600' onClick={() => navigate('/dashboard')}><span><RxDashboard /></span>  <span>Dashboard</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500' onClick={() => navigate('/dashboard/users')}><span><FaUserGroup /></span>  <span>Users</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500' onClick={() => navigate('/dashboard/floor')}><span><MdOutlineDensitySmall /></span>  <span>Floor</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500' onClick={() => navigate('/dashboard/rooms')}><span><LiaBedSolid /></span>  <span>Rooms</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500' onClick={() => navigate('/dashboard/roomtype')}><span><MdRoomService /></span>  <span>Roomtype</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500' onClick={() => navigate('/dashboard/customer')}><span><RiCustomerServiceFill /></span>  <span>Customer</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500' onClick={() => navigate('/dashboard/booking')}><span><TbBrandBooking /></span>  <span>Booking</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500'><span><FcDebt /></span>  <span>Debts</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500'><span><GiPayMoney /></span>  <span>Payment</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500'><span><GiExpense /></span>  <span>Expense</span> </li>
+            <li className='flex gap-4 cursor-pointer items-center text-sm text-gray-500'><span><TbReportMoney /></span>  <span>Reports</span> </li>
         </ul>
-        <h3 className='text-sm text-gray-400 mt-4 ml-4'>Settings</h3>
+        <h3 className='text-sm text-gray-400 font-semibold mt-4 ml-4'>Settings</h3>
         <ul className='mt-5  justify-center grid gap-6 mr-6'>
-            <li className='flex gap-4 items-center text-sm text-indigo-900'><span className='text-sm'><FaUserAlt /></span>  <span>Profile</span> </li>
-        <li className='flex gap-4 items-center text-sm text-indigo-900'><span><IoSettings /></span>  <span>Setting</span> </li>
-            <li className='flex gap-4 items-center text-sm text-indigo-900'><span><GiHelp /></span>  <span>Help</span> </li>
+            <li className='flex gap-4 items-center text-sm text-gray-500'><span className='text-sm'><FaUserAlt /></span>  <span>Profile</span> </li>
+        <li className='flex gap-4 items-center text-sm text-gray-500'><span><IoSettings /></span>  <span>Setting</span> </li>
+            <li className='flex gap-4 items-center text-sm text-gray-500'><span><GiHelp /></span>  <span>Help</span> </li>
         </ul>
     </div>
   )

@@ -17,6 +17,8 @@ import {
 import toast from "react-hot-toast";
 import { getAllFloorsFn } from "../../Redux/Dashboard/Floor/AllFloor";
 import { newfloorFn, resetFloorState } from "../../Redux/Dashboard/Floor/NewFloor";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../../components/ui/dropdown-menu";
+import { TbMenu3 } from "react-icons/tb";
 
 const FloorPage = () => {
   const AllFloorState = useSelector((state: RootState) => state.AllFloor);
@@ -203,12 +205,28 @@ const FloorPage = () => {
                       {dayjs(item.Created_At).format("DD/MM/YYYY")}
                     </td>
                     <td className="flex items-center gap-4 justify-center px-6 py-4">
-                      <span className="text-2xl text-blue-500">
-                        <RiEditCircleFill />
-                      </span>
-                      <span className="text-2xl text-red-500">
-                        <IoIosRemoveCircle />
-                      </span>
+                    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="bg-blue-500 text-white p-1.5 rounded-full font-bold hover:bg-white hover:border hover:border-indigo-600 hover:text-indigo-600 duration-500 transition-all hover:font-bold">
+      <TbMenu3 />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-30">
+        <DropdownMenuLabel className="text-center text-blue-500">More Details</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+         <span className=" ml-3 font-semibold text-orange-500">Preview</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="w-full" />
+        <DropdownMenuItem>
+         <span className=" ml-3 font-semibold text-green-500">Edit</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="w-full" />
+        <DropdownMenuItem>
+         <span className=" ml-3 font-semibold text-red-500">Delete</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
                     </td>
                   </tr>
                 ))}

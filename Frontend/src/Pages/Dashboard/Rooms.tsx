@@ -17,56 +17,24 @@ import {
 } from "../../components/ui/dialog";
 import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
 import toast from "react-hot-toast";
-import { newUsersFn } from "../../Redux/Dashboard/Users/NewUser";
 import { getAllRoomsFn } from "../../Redux/Dashboard/Rooms/AllRooms";
-import { Check, ChevronsUpDown } from "lucide-react"
- 
-import { cn } from "../../lib/utils"
-import { Button } from "../../components/ui/button"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../../components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../../components/ui/popover"
+import { newRoomFn, resetRoomState } from "../../Redux/Dashboard/Rooms/NewRoom";
 import { getAllRoomTypesFn } from "../../Redux/Dashboard/RoomType/AllRoomType";
- 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
+import { TbMenu3 } from "react-icons/tb";
+import { HiOutlineAdjustments } from "react-icons/hi";
 
 const AllRooms = () => {
   const AllRoomsData = useSelector((state: RootState) => state.AllRoom);
   const dispatch = useDispatch<AppDispatch>();
-  const toastId = 'userpage'
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const toastId = "roompage";
   useEffect(() => {
     dispatch(getAllRoomsFn());
   }, []);
@@ -74,60 +42,73 @@ const AllRooms = () => {
   // Use State Functions Starts Here
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filtered laptops based on search term by name, price, or core
-  const filteredLaptops = AllRoomsData?.data?.filter(
-    (item) =>
-      item.R_No.toString().includes(searchTerm) ||
-      item.R_Type.Rt_Name.toString().toLowerCase().includes(searchTerm.toLowerCase())
+
+    const AllRoomTypesData = useSelector(
+    (state: RootState) => state.AllRoomTypes
   );
+  useEffect(() => {
+    dispatch(getAllRoomTypesFn());
+  }, []);
+
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "available" | "booked"
+  >("all");
+
+  const filteredLaptops = AllRoomsData?.data
+    ?.filter(
+      (item) =>
+        item.R_No.toString().includes(searchTerm) ||
+        item.R_Type.Rt_Name.toString()
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+    )
+    ?.filter((item) => {
+      if (filterStatus === "all") return true;
+      if (filterStatus === "available") return item.Is_Booked === false;
+      if (filterStatus === "booked") return item.Is_Booked === true;
+    });
 
   // Registration Functions Starts Here
- // Creating New User Functions Startting In here 
- const newUserState = useSelector((state : RootState) => state.NewUser)
+  const [R_No, setR_No] = useState("");
+  const [Rt_Id, setRt_Id] = useState(Number);
+  const [F_Id, setF_Id] = useState(Number);
+  // Creating New User Functions Startting In here
+  const NewRoomState = useSelector((state: RootState) => state.NewRoom);
 
- const [R_No , setR_No] = useState('')
- const [Rt_Id , setRt_Id] = useState('')
- const [F_Id , setF_Id] = useState('')
-
- useEffect(() => {
-   if(newUserState.IsLoading){
-     toast.loading('Loading..' , { id : toastId})
-   }
-   if(newUserState.IsSuccess){
-     toast.success('New User Registered Successfully' , { id : toastId})
-      dispatch(getAllUsersFn())
-   }
-   if(newUserState.IsError){
-     toast.error(newUserState.E_message , { id : toastId})
-   }
- },[newUserState])
-
- const handleRegisterSubmit = () => {
-   const data = {
-    Rt_Id,
-    F_Id,
-    R_No
-   }
-   dispatch(newR(data))
- }
-
-
-//  Room Type Dispatch Endpoints Starts  In Here 
-
-    const AllRoomTypesData = useSelector((state: RootState) => state.AllRoomTypes);
   useEffect(() => {
-   dispatch(getAllRoomTypesFn())
-  },[])
+    if (NewRoomState.IsLoading) {
+      toast.loading("Loading..", { id: toastId });
+    }
+    if (NewRoomState.IsSuccess) {
+      toast.success("New Room Registered", { id: toastId });
+      dispatch(getAllRoomsFn());
+    }
+    if (NewRoomState.IsError) {
+      toast.error(NewRoomState.E_message, { id: toastId });
+    }
+    dispatch(resetRoomState())
+  }, [NewRoomState.data]);
+
+  const handleRegisterSubmit = (e : React.FormEvent) => {
+    e.preventDefault()
+    const data = {
+      Rt_Id,
+      F_Id,
+      R_No,
+    };
+    dispatch(newRoomFn(data));
+  };
+
+  //  Room Type Dispatch Endpoints Starts  In Here
+
+
 
   return (
     <div>
       {/* Top Part */}
       <div className="flex justify-between px-6 mt-3 items-center">
         <div className="ml-4">
-          <h2 className="text-lg font-bold text-white">
-            {" "}
-            All Rooms Data
-          </h2>
+          <h2 className="text-lg font-bold text-white"> All Rooms Data</h2>
         </div>
         {/* Dialog Part Starts Here */}
         <div className="flex items-center justify-center mr-1 gap-4">
@@ -158,8 +139,8 @@ const AllRooms = () => {
                   <label className="text-sm font-semibold">No</label>{" "}
                   <input
                     type="text"
-                    value={Name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={R_No}
+                    onChange={(e) => setR_No(e.target.value)}
                     className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
@@ -169,24 +150,32 @@ const AllRooms = () => {
                   </label>{" "}
                   <input
                     type="text"
-                    value={Phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className='flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    value={F_Id}
+                    onChange={(e) => setF_Id(Number(e.target.value))}
+                    className="flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
                 <div className="flex flex-col gap-1 col-span-2">
                   <label htmlFor="Color" className="text-sm font-semibold">
                     Roomtype
                   </label>{" "}
-                  <select className="lex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                    {AllRoomTypesData.data.map((item , idx) => (
-                      <option value={item.Rt_Id} key={idx}>{item.Rt_Name}</option>
+                  <select
+                  value={Rt_Id}
+                  onChange={(e) => setRt_Id(Number(e.target.value))}
+                  className="lex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    <option selected> Choose Room Type</option>
+                    {AllRoomTypesData.data.map((item, idx) => (
+                      <option value={item.Rt_Id} key={idx}>
+                        {item.Rt_Name}
+                      </option>
                     ))}
                   </select>
                 </div>
-             
               </div>
-              <button className="w-full bg-indigo-500 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded-md text-white mt-2" onClick={handleRegisterSubmit}>
+              <button
+                className="w-full bg-blue-600 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded text-white mt-2"
+                onClick={handleRegisterSubmit}
+              >
                 <span className=" text-xl">
                   <IoIosAddCircle />
                 </span>{" "}
@@ -196,9 +185,36 @@ const AllRooms = () => {
           </Dialog>
         </div>
       </div>
+      <div className="flex justify-end mt-6">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="bg-white text-blue-600 py-2 px-4  font-medium flex justify-center gap-2 mr-6 rounded text-sm items-center">
+              <HiOutlineAdjustments />
+              Filter
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-30">
+            <DropdownMenuLabel className="text-center text-blue-500">
+              More Details
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setFilterStatus("all")}>
+            <span className=" ml-3 font-semibold" >All</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="w-full" />
+            <DropdownMenuItem onClick={() => setFilterStatus("available")}>
+             <span className=" ml-3 font-semibold text-green-500" >Available</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="w-full" />
+            <DropdownMenuItem onClick={() => setFilterStatus("booked")}>
+              <span className=" ml-3 font-semibold text-blue-600" >Booked</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       {/* Table Part */}
       <div className=" px-6 mt-6  ">
-        <div className="bg-white h-[81vh] rounded-2xl">
+        <div className="bg-white  rounded-2xl">
           <div className="">
             <table className="w-full text-sm text-left rtl:text-right ">
               <thead className="text-xs text-white  bg-blue-500 shadow-md rounded-lg">
@@ -258,32 +274,66 @@ const AllRooms = () => {
                     >
                       {item.R_No}
                     </td>
-                    <td className="px-6 py-4 text-center">{item.R_Type.Rt_Name}</td>
-                    <td className="px-6 py-4 text-center">{item.R_Type.Rt_Price}</td>
+                    <td className="px-6 py-4 text-center">
+                      {item.R_Type.Rt_Name}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {item.R_Type.Rt_Price}
+                    </td>
                     <td
                       scope="row"
                       className="px-6 py-4 text-left font-medium text-gray-900 whitespace-nowrap"
                     >
                       {item.F_Id}
                     </td>
-                    <td className="px-6 py-4 text-center">{item.R_Type.No_Beds}</td>
+                    <td className="px-6 py-4 text-center">
+                      {item.R_Type.No_Beds}
+                    </td>
                     <td className="flex items-center gap-4 justify-center px-6 py-4">
-                        {item.Is_Booked === false ? (
-                          <button className='bg-green-500 py-1 px-4 rounded text-white font-medium'>Available</button>
-                        ) : (
-                          <button className='bg-blue-500 py-1 px-6 rounded text-white font-medium'>Booked</button>
-                        )}
-                      </td>
+                      {item.Is_Booked === false ? (
+                        <button className="bg-green-500 py-1 px-4 rounded text-white font-medium">
+                          Available
+                        </button>
+                      ) : (
+                        <button className="bg-blue-500 py-1 px-6 rounded text-white font-medium">
+                          Booked
+                        </button>
+                      )}
+                    </td>
                     <td className="px-6 py-4 text-center">
                       {dayjs(item.Created_At).format("DD/MM/YYYY")}
                     </td>
                     <td className="flex items-center gap-4 justify-center px-6 py-4">
-                      <span className="text-2xl text-blue-500">
-                        <RiEditCircleFill />
-                      </span>
-                      <span className="text-2xl text-red-500">
-                        <IoIosRemoveCircle />
-                      </span>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="bg-blue-500 text-white p-1.5 rounded-full font-bold hover:bg-white hover:border hover:border-blue-600 hover:text-blue-600 duration-500 transition-all hover:font-bold">
+                            <TbMenu3 />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-30">
+                          <DropdownMenuLabel className="text-center text-blue-500">
+                            More Details
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-orange-500">
+                              Preview
+                            </span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="w-full" />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-green-500">
+                              Edit
+                            </span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="w-full" />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-red-500">
+                              Delete
+                            </span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 ))}
@@ -293,24 +343,6 @@ const AllRooms = () => {
         </div>
       </div>
       {/* Pagination Part */}
-      <div className="flex justify-between items-center px-6 mt-4">
-        <div>
-          <p className="text-sm ml-1 text-gray-400">
-            <span className="text-[#1a1a1a] text-xs">
-              {filteredLaptops.length}{" "}
-            </span>{" "}
-            Rooms Registered
-          </p>
-        </div>
-        <div className=" flex items-center gap-2 mr-1">
-          <button
-            onClick={() => {}}
-            className="py-2 px-4 flex items-center gap-2 bg-blue-500 text-white rounded text-md"
-          >
-            <FaTrashAlt /> <span className="font-semibold">Trash</span>
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

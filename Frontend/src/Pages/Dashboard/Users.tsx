@@ -17,13 +17,25 @@ import {
 } from "../../components/ui/dialog";
 import { getAllUsersFn } from "../../Redux/Dashboard/Users/AllUsers";
 import toast from "react-hot-toast";
-import { newUsersFn, resetUserState } from "../../Redux/Dashboard/Users/NewUser";
+import {
+  newUsersFn,
+  resetUserState,
+} from "../../Redux/Dashboard/Users/NewUser";
 import { MdDeleteOutline } from "react-icons/md";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
+import { TbMenu3 } from "react-icons/tb";
 
 const AllUsers = () => {
   const AllUserState = useSelector((state: RootState) => state.AllUsers);
   const dispatch = useDispatch<AppDispatch>();
-  const toastId = 'userpage'
+  const toastId = "userpage";
   useEffect(() => {
     dispatch(getAllUsersFn());
   }, []);
@@ -41,49 +53,44 @@ const AllUsers = () => {
   );
 
   // Registration Functions Starts Here
- // Creating New User Functions Startting In here 
- const newUserState = useSelector((state : RootState) => state.NewUser)
+  // Creating New User Functions Startting In here
+  const newUserState = useSelector((state: RootState) => state.NewUser);
 
- const [Name , setName] = useState('')
- const [Phone , setPhone] = useState('')
- const [Email , setEmail] = useState('')
- const [Password  , setPassword] = useState('')
+  const [Name, setName] = useState("");
+  const [Phone, setPhone] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
 
- useEffect(() => {
-   if(newUserState.IsLoading){
-     toast.loading('Loading..' , { id : toastId})
-   }
-   if(newUserState.IsSuccess){
-     toast.success('New User Registered Successfully' , { id : toastId})
-      dispatch(getAllUsersFn())
-   }
-   if(newUserState.IsError){
-     toast.error(newUserState.E_message , { id : toastId})
-   }
-   dispatch(resetUserState())
- },[newUserState])
+  useEffect(() => {
+    if (newUserState.IsLoading) {
+      toast.loading("Loading..", { id: toastId });
+    }
+    if (newUserState.IsSuccess) {
+      toast.success("New User Registered Successfully", { id: toastId });
+      dispatch(getAllUsersFn());
+    }
+    if (newUserState.IsError) {
+      toast.error(newUserState.E_message, { id: toastId });
+    }
+    dispatch(resetUserState());
+  }, [newUserState]);
 
- const handleRegisterSubmit = () => {
-   const data = {
-     Name,
-     Phone,
-     Email,
-     Password 
-   }
-   dispatch(newUsersFn(data))
- }
-
-
+  const handleRegisterSubmit = () => {
+    const data = {
+      Name,
+      Phone,
+      Email,
+      Password,
+    };
+    dispatch(newUsersFn(data));
+  };
 
   return (
     <div>
       {/* Top Part */}
       <div className="flex justify-between px-6 mt-3 items-center">
         <div className="ml-4">
-          <h2 className="text-lg font-bold text-white">
-            {" "}
-            All Users Data
-          </h2>
+          <h2 className="text-lg font-bold text-white"> All Users Data</h2>
         </div>
         {/* Dialog Part Starts Here */}
         <div className="flex items-center justify-center mr-1 gap-4">
@@ -108,7 +115,7 @@ const AllUsers = () => {
                   Make sure data that you entered in this dialog registration.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid grid-cols-1 gap-4 mt-2">
+              <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   {" "}
                   <label className="text-sm font-semibold">Name</label>{" "}
@@ -130,7 +137,7 @@ const AllUsers = () => {
                     className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 col-span-2">
                   <label htmlFor="Color" className="text-sm font-semibold">
                     Email
                   </label>{" "}
@@ -141,7 +148,7 @@ const AllUsers = () => {
                     className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 col-span-2">
                   <label htmlFor="Color" className="text-sm font-semibold">
                     Password
                   </label>{" "}
@@ -153,7 +160,10 @@ const AllUsers = () => {
                   />
                 </div>
               </div>
-              <button className="w-full bg-blue-500 flex justify-center items-center gap-2 text-sm hover:shadow-lg font-semibold py-3 rounded text-white mt-2" onClick={handleRegisterSubmit}>
+              <button
+                className="w-full bg-blue-500 flex justify-center items-center gap-2 text-sm hover:shadow-lg font-semibold py-3 rounded text-white mt-2"
+                onClick={handleRegisterSubmit}
+              >
                 <span className=" text-lg">
                   <IoIosAddCircle />
                 </span>{" "}
@@ -205,7 +215,10 @@ const AllUsers = () => {
               </thead>
               <tbody>
                 {filteredUsers?.map((item, id) => (
-                  <tr className="border-t text-slate-00 border-gray-100" key={id}>
+                  <tr
+                    className="border-t text-slate-00 border-gray-100"
+                    key={id}
+                  >
                     <td className="w-4 p-4">
                       <div className="flex items-center">
                         <input
@@ -235,12 +248,36 @@ const AllUsers = () => {
                       {dayjs(item.Created_At).format("DD/MM/YYYY")}
                     </td>
                     <td className="flex items-center gap-4 justify-center px-6 py-4">
-                      <span className="text-md text-blue-500">
-                      <FiEdit2 />
-                      </span>
-                      <span className="text-lg text-red-500">
-                      <MdDeleteOutline />
-                      </span>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button className="bg-blue-500 text-white p-1.5 rounded-full font-bold hover:bg-white hover:border hover:border-blue-600 hover:text-blue-600 duration-500 transition-all hover:font-bold">
+                            <TbMenu3 />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-30">
+                          <DropdownMenuLabel className="text-center text-blue-500">
+                            More Details
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-green-500">
+                              Make Admin
+                            </span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="w-full" />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-indigo-500">
+                              Edit
+                            </span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="w-full" />
+                          <DropdownMenuItem>
+                            <span className=" ml-3 font-semibold text-red-500">
+                              Delete
+                            </span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 ))}
