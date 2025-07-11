@@ -10,6 +10,10 @@ import RoomTyepe from '../Pages/Dashboard/RoomType'
 import FloorPage from '../Pages/Dashboard/FloorPage'
 import Booking from '../Pages/Dashboard/Booking'
 import Customer from '../Pages/Dashboard/Customer'
+import Debts from '../Pages/Dashboard/Debts'
+import Payment from '../Pages/Dashboard/Payment'
+import Reports from '../Pages/Dashboard/Reports'
+import Expense from '../Pages/Dashboard/Expense'
 
 const Router = () => {
   return (
@@ -73,6 +77,22 @@ export const router = createBrowserRouter([
             {
                 path : 'customer',
                 element : <Customer />
+            },
+            {
+                path : 'debts',
+                element : <Debts />
+            },
+            {
+                path : 'payment',
+                element : <Payment />
+            },
+            {
+                path : 'reports',
+                element : <Reports />
+            },
+            {
+                path : 'expense',
+                element : <Expense />
             }
         ]
     }

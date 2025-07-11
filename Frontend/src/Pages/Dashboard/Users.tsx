@@ -90,19 +90,19 @@ const AllUsers = () => {
       {/* Top Part */}
       <div className="flex justify-between px-6 mt-3 items-center">
         <div className="ml-4">
-          <h2 className="text-lg font-bold text-white"> All Users Data</h2>
+          <h2 className="text-md font-serif font-bold text-white"> All Users Data</h2>
         </div>
         {/* Dialog Part Starts Here */}
         <div className="flex items-center justify-center mr-1 gap-4">
           <input
             type="text"
-            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-sm"
+            className="px-3 py-2 text-blue-500 placeholder:text-gray-200 placeholder:text-xs text-center shadow-md bg-white rounded text-xs"
             placeholder="Search Here"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Dialog>
-            <DialogTrigger className="bg-white/20 text-white duration-500 transition-all text-sm px-4 py-2  rounded font-medium flex items-center gap-2">
+            <DialogTrigger className="bg-white/20 text-white duration-500 transition-all text-xs px-4 py-2  rounded font-medium flex items-center gap-2">
               <span className="text-md font-bold">
                 <VscGitPullRequestNewChanges />
               </span>{" "}
@@ -110,58 +110,58 @@ const AllUsers = () => {
             </DialogTrigger>
             <DialogContent className="bg-white">
               <DialogHeader>
-                <DialogTitle>Adding New User</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-md font-serif font-semibold">Adding New User</DialogTitle>
+                <DialogDescription className="text-xs font-medium text-gray-300">
                   Make sure data that you entered in this dialog registration.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-semibold">Name</label>{" "}
+                  <label className="text-xs font-semibold">Name</label>{" "}
                   <input
                     type="text"
                     value={Name}
                     onChange={(e) => setName(e.target.value)}
-                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 mt-1 w-full rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs font-semibold">
                     Phone
                   </label>{" "}
                   <input
                     type="text"
                     value={Phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 mt-1 w-full rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1 col-span-2">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs font-semibold">
                     Email
                   </label>{" "}
                   <input
                     type="email"
                     value={Email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 mt-1 w-full rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1 col-span-2">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs font-semibold">
                     Password
                   </label>{" "}
                   <input
                     type="password"
                     value={Password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className='"flex h-10 w-full rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 mt-1 w-full rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
               </div>
               <button
-                className="w-full bg-blue-500 flex justify-center items-center gap-2 text-sm hover:shadow-lg font-semibold py-3 rounded text-white mt-2"
+                className="w-full bg-blue-500 flex justify-center items-center gap-2 text-xs hover:shadow-lg font-semibold py-3 rounded text-white mt-2"
                 onClick={handleRegisterSubmit}
               >
                 <span className=" text-lg">
@@ -177,7 +177,7 @@ const AllUsers = () => {
       <div className=" px-6 mt-6  ">
         <div className="bg-white h-[88vh] rounded">
           <div className="w-full mx-auto">
-            <table className="w-full text-sm text-left rtl:text-right ">
+            <table className="w-full text-xs font-medium text-left rtl:text-right ">
               <thead className="text-xs text-white  bg-blue-500  rounded-t shadow-md rounded-lg">
                 <tr>
                   <th scope="col" className="px-4 py-3">

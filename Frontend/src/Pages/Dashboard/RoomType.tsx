@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import { newUsersFn } from "../../Redux/Dashboard/Users/NewUser";
 import { getAllRoomsFn } from "../../Redux/Dashboard/Rooms/AllRooms";
 import { getAllRoomTypesFn } from "../../Redux/Dashboard/RoomType/AllRoomType";
-import { newRoomTypeFn } from "../../Redux/Dashboard/RoomType/NewRoomType";
+import { newRoomTypeFn, resetRoomTypeState } from "../../Redux/Dashboard/RoomType/NewRoomType";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../../components/ui/dropdown-menu";
 import { TbMenu3 } from "react-icons/tb";
 
@@ -61,6 +61,7 @@ const RoomType = () => {
    if(newRoomTypeState.IsError){
      toast.error(newRoomTypeState.E_message , { id : toastId})
    }
+   dispatch(resetRoomTypeState())
  },[newRoomTypeState])
 
  const handleRegisterSubmit = () => {
@@ -88,13 +89,13 @@ const RoomType = () => {
         <div className="flex items-center justify-center mr-1 gap-4">
           <input
             type="text"
-            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-sm"
+            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-xs "
             placeholder="Search Here"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Dialog>
-            <DialogTrigger className="bg-white/20 text-white px-4 py-2 text-sm rounded font-semibold flex items-center gap-2">
+            <DialogTrigger className="bg-white/20 text-white px-4 py-2 text-xs  rounded font-semibold flex items-center gap-2">
               <span className="text-md font-bold">
                 <VscGitPullRequestNewChanges />
               </span>{" "}
@@ -110,39 +111,39 @@ const RoomType = () => {
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-semibold">Name</label>{" "}
+                  <label className="text-xs  font-semibold">Name</label>{" "}
                   <input
                     type="text"
                     value={Rt_Name}
                     onChange={(e) => setRt_Name(e.target.value)}
-                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-xs  ring-offset-white file:border-0 file:bg-transparent file:text-xs  file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs  font-semibold">
                     Price
                   </label>{" "}
                   <input
                     type="text"
                     value={Rt_Price}
                     onChange={(e) => setRt_Price(e.target.value)}
-                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-xs  ring-offset-white file:border-0 file:bg-transparent file:text-xs  file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1 col-span-2">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs  font-semibold">
                     # Beds
                   </label>{" "}
                   <input
                     type="email"
                     value={No_Beds}
                     onChange={(e) => setNo_Beds(e.target.value)}
-                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-xs  ring-offset-white file:border-0 file:bg-transparent file:text-xs  file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
              
               </div>
-              <button className="w-full bg-blue-500 text-sm flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded text-white mt-2" onClick={handleRegisterSubmit}>
+              <button className="w-full bg-blue-500 text-xs  flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded text-white mt-2" onClick={handleRegisterSubmit}>
                 <span className=" text-xl">
                   <IoIosAddCircle />
                 </span>{" "}
@@ -156,7 +157,7 @@ const RoomType = () => {
       <div className=" px-6 mt-6  ">
         <div className="bg-white h-[81vh] rounded-2xl">
           <div className=" ">
-            <table className="w-full text-sm text-left rtl:text-right ">
+            <table className="w-full text-xs font-medium text-left rtl:text-right ">
               <thead className="text-xs text-white bg-blue-500 shadow-md rounded-lg">
                 <tr>
                   <th scope="col" className="px-4 py-2.5">
@@ -212,7 +213,7 @@ const RoomType = () => {
                       {item.Rt_Id}
                     </td>
                     <td className="px-6 py-4 text-center">{item.Rt_Name}</td>
-                    <td className="px-6 py-4 text-center">{item.Rt_Price}</td>
+                    <td className="px-6 py-4 text-center">{item.Rt_Price}$</td>
                     <td className="px-6 py-4 text-center">{item.No_Beds}</td>
                     <td className="flex items-center gap-4 justify-center px-6 py-4">
                         {item.Is_Deleted === false ? (
@@ -266,7 +267,7 @@ const RoomType = () => {
       {/* Pagination Part */}
       <div className="flex justify-between items-center px-6 mt-4">
         <div>
-          <p className="text-sm ml-1 text-gray-400">
+          <p className="text-xs  ml-1 text-gray-400">
             <span className="text-[#1a1a1a] text-xs">
               {filteredLaptops.length}{" "}
             </span>{" "}

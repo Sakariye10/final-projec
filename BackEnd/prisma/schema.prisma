@@ -22,8 +22,8 @@ enum Roles {
 model Users {
   U_Id       Int        @id @default(autoincrement())
   Name       String
-  Phone      String
-  Email      String
+  Phone      String @unique
+  Email      String @unique
   Password   String
   Role       Roles      @default(User)
   Is_Deleted Boolean    @default(false)

@@ -62,14 +62,14 @@ const Main = () => {
           </div>
         </div>
         <div className="tp-2 flex justify-center it gap-3">
-          <button className="bg-white rounded-full p-2 text-blue-600 text-md">
+          <button className="bg-white rounded-full p-2 text-blue-600 text-sm">
             <CgMail />
           </button>
-          <button className="bg-white rounded-full p-2 text-blue-600 text-md">
+          <button className="bg-white rounded-full p-2 text-blue-600 text-sm">
             <IoNotificationsOutline />
           </button>
           <button
-            className="bg-white rounded text-xs font-medium py-2 px-4 text-blue-600 text-md"
+            className="bg-white rounded text-xs font-medium py-2 px-4 text-blue-600"
             onClick={handleLogOut}
           >
             Log out
@@ -77,84 +77,81 @@ const Main = () => {
         </div>
       </div>
       {/* Chart  */}
-      <p className="est text-white my-6 ml-4 font-bold text-sm">
-        Estimating income for last month
-      </p>
-      <div className="mt-2 w-[98%] mx-auto grid lg:grid-cols-4 md:grid-cols-2 gap-7">
-        <div className="bg-white rounded-md shadow-xl  h-[150px] grid grid-cols-2">
-          <div className="tp-1 flex justify-center ml-6 items-center">
+      <div className="mt-6 w-[98%] mx-auto grid lg:grid-cols-4 md:grid-cols-2 gap-7">
+        <div className="bg-white rounded-md shadow-md  h-[120px] grid grid-cols-2">
+          <div className="tp-1 flex justify-center ml-1 items-center">
             <div>
-              <h2 className="text-3xl text-zinc-700 font-extrabold">$42,876</h2>
+              <h2 className="text-2xl text-zinc-700 font-extrabold">$42,876</h2>
               <span className="text-xs font-semibold text-zinc-400">
                 Total income
               </span>
             </div>
           </div>
-          <div className="tp-2 flex items-center justify-center text-white">
-            <div className="bg-zinc-700 p-4 text-xl rounded-full">
+          <div className="tp-2 flex items-center bg-zinc-700 rounded-tr-md rounded-br-md justify-center text-white">
+            <div className="bg-white text-zinc-700 rounded-tr-md p-4 text-xl rounded-full">
               <span>
                 <FaMoneyCheckAlt />
               </span>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-md shadow-xl grid grid-cols-2  h-[150px]">
-          <div className="tp-1 flex justify-center ml-6 items-center">
+        <div className="bg-white rounded-md shadow-md grid grid-cols-2  h-[120px]">
+          <div className="tp-1 flex justify-center ml-1 items-center">
             <div>
-              <h2 className="text-3xl text-indigo-700 font-extrabold">$176</h2>
+              <h2 className="text-2xl text-indigo-700 font-extrabold">$176</h2>
               <span className="text-xs font-semibold text-indigo-300">
                 Total expense
               </span>
             </div>
           </div>
-          <div className="tp-2 flex items-center justify-center text-white">
-            <div className="bg-indigo-700 p-4 text-xl font-extrabold rounded-full">
-              <span>
+          <div className="tp-2 flex items-center bg-indigo-700 rounded-tr-md rounded-br-md justify-center text-white">
+            <div className="bg-white p-4 text-xl rounded-tl-md font-extrabold rounded-full">
+              <span className="text-indigo-700">
                 <GiExpense />
               </span>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-md shadow-xl grid grid-cols-2 h-[150px]">
-          <div className="tp-1 flex justify-center ml-6 items-center">
+        <div className="bg-white rounded-md shadow-md grid grid-cols-2 h-[120px]">
+          <div className="tp-1 flex justify-center ml-1 items-center">
             <div>
-              <h2 className="text-3xl text-orange-500 font-extrabold">84</h2>
-              <span className="text-xs font-semibold text-orange-300">
-                Total loaned people
+              <h2 className="text-2xl text-orange-500 font-extrabold">84</h2>
+              <span className="text-xs  font-semibold text-orange-300">
+                Loaned People
               </span>
             </div>
           </div>
-          <div className="tp-2 flex items-center justify-center text-white">
-            <div className="bg-orange-500 p-4 rounded-full">
-              <span className="text-xl">
+          <div className="tp-2 flex items-center justify-center rounded-tr-md rounded-br-md bg-orange-500 text-white">
+            <div className="bg-white p-4 rounded-tr-md rounded-full">
+              <span className="text-xl text-orange-500">
                 <ImUserPlus />
               </span>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-md shadow-xl grid grid-cols-2 h-[150px]">
-          <div className="tp-1 flex justify-center ml-6 items-center">
+        <div className="bg-white rounded-md shadow-md grid grid-cols-2 h-[120px]">
+          <div className="tp-1 flex justify-center ml-1 items-center">
             <div>
-              <h2 className="text-3xl text-green-500 font-extrabold">{AllBookingState.data.length}</h2>
+              <h2 className="text-2xl text-green-500 font-extrabold">{AllBookingState.data.length}</h2>
               <span className="text-xs font-medium text-green-300">
-                Total booking data
+                Booking Data
               </span>
             </div>
           </div>
-          <div className="tp-2 flex items-center justify-center text-white">
-            <div className="bg-green-500 p-4 rounded-full">
-              <span className="text-xl">
+          <div className="tp-2 flex items-center bg-green-500 rounded-tr-md rounded-br-md justify-center text-white">
+            <div className="bg-white p-4 rounded-tl-md rounded-full">
+              <span className="text-xl text-green-500">
                 <TbBrandBooking />
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6 w-[98%] mx-auto">
-        <div className="col-span-2">
+      <div className="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-2 w-[98%] mx-auto">
+        <div className="col-span-2 w-full h-[410px]">
           <Chart3 />
         </div>
-        <div className="h-[410px] border p-6 rounded-xl shadow ">
+        <div className="h-[408px] border p-6 rounded-2xl shadow">
           <Component />
         </div>
       </div>

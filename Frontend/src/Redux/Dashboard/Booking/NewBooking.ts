@@ -18,7 +18,9 @@ export const newBookingFn = createAsyncThunk(
         try {
             const Token = JSON.parse(localStorage.getItem("userInfo")!).token;
             const res = await axios.post(`${Url}/booking/new` , data , {
-                withCredentials : true
+                headers : {
+                    Authorization : `Bearer ${Token}`
+                }
             })
             return res.data
         } catch (error) {

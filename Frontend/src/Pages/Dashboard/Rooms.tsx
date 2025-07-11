@@ -87,7 +87,7 @@ const AllRooms = () => {
       toast.error(NewRoomState.E_message, { id: toastId });
     }
     dispatch(resetRoomState())
-  }, [NewRoomState.data]);
+  }, [NewRoomState]);
 
   const handleRegisterSubmit = (e : React.FormEvent) => {
     e.preventDefault()
@@ -114,13 +114,13 @@ const AllRooms = () => {
         <div className="flex items-center justify-center mr-1 gap-4">
           <input
             type="text"
-            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-sm"
+            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-xs"
             placeholder="Search Here"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Dialog>
-            <DialogTrigger className="bg-white/20 text-white px-4 py-2 text-sm rounded font-medium flex items-center gap-2">
+            <DialogTrigger className="bg-white/20 text-white px-4 py-2 text-xs rounded font-medium flex items-center gap-2">
               <span className="text-md font-bold">
                 <VscGitPullRequestNewChanges />
               </span>{" "}
@@ -136,33 +136,33 @@ const AllRooms = () => {
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-semibold">No</label>{" "}
+                  <label className="text-xs font-semibold">No</label>{" "}
                   <input
                     type="text"
                     value={R_No}
                     onChange={(e) => setR_No(e.target.value)}
-                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs font-semibold">
                     # Floor
                   </label>{" "}
                   <input
                     type="text"
                     value={F_Id}
                     onChange={(e) => setF_Id(Number(e.target.value))}
-                    className="flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
                 <div className="flex flex-col gap-1 col-span-2">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs font-semibold">
                     Roomtype
                   </label>{" "}
                   <select
                   value={Rt_Id}
                   onChange={(e) => setRt_Id(Number(e.target.value))}
-                  className="lex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                  className="lex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                     <option selected> Choose Room Type</option>
                     {AllRoomTypesData.data.map((item, idx) => (
                       <option value={item.Rt_Id} key={idx}>
@@ -173,12 +173,9 @@ const AllRooms = () => {
                 </div>
               </div>
               <button
-                className="w-full bg-blue-600 flex justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded text-white mt-2"
+                className="w-full bg-blue-600 flex justify-center items-center gap-2 text-sm hover:shadow-lg font-semibold py-3 rounded text-white mt-2"
                 onClick={handleRegisterSubmit}
               >
-                <span className=" text-xl">
-                  <IoIosAddCircle />
-                </span>{" "}
                 Add Room
               </button>
             </DialogContent>
@@ -188,7 +185,7 @@ const AllRooms = () => {
       <div className="flex justify-end mt-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="bg-white text-blue-600 py-2 px-4  font-medium flex justify-center gap-2 mr-6 rounded text-sm items-center">
+            <button className="bg-white text-blue-600 py-2 px-4  font-medium flex justify-center gap-2 mr-6 rounded text-xs items-center">
               <HiOutlineAdjustments />
               Filter
             </button>
@@ -216,7 +213,7 @@ const AllRooms = () => {
       <div className=" px-6 mt-6  ">
         <div className="bg-white  rounded-2xl">
           <div className="">
-            <table className="w-full text-sm text-left rtl:text-right ">
+            <table className="w-full text-xs text-left rtl:text-right ">
               <thead className="text-xs text-white  bg-blue-500 shadow-md rounded-lg">
                 <tr>
                   <th scope="col" className="px-4 py-2.5">

@@ -6,6 +6,7 @@ import EmployeeRoute from './routes/EmployeeRoute'
 import RoomRoute from './routes/RoomRoute'
 import RoomTypeRoute from './routes/RoomtypeRoute'
 import BookingRoute from './routes/BookingRoute'
+import DebtsRoute from './routes/DebtsRoute'
 import cors from 'cors'
 const app = express();
 const port = 5000;
@@ -25,6 +26,7 @@ app.use('/api/customer' , CustomerRoute)
 app.use('/api/employee' , EmployeeRoute)
 app.use('/api/floor' , FloorRoute)
 app.use('/api/booking' , BookingRoute)
+app.use('/api/debts' , DebtsRoute)
 
 
 app.listen(port , () => {

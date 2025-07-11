@@ -3,17 +3,36 @@ import Sidebar from './Sidebar'
 import { Outlet } from 'react-router-dom'
 
 const Dash_router = () => {
-  // if(localStorage.getItem)
   return (
-    <div className=' w-full  h-screen flex bg-white'>
-        <div className='w-[16%] border-r hidden lg:block border-gray-100'>
-            <Sidebar />
+    <div className='w-full h-screen flex bg-white'>
+      {/* Sidebar Section with hidden scrollbar */}
+      <div className='w-[16%] border-r hidden lg:block border-gray-100 h-screen overflow-y-auto'>
+        <Sidebar />
+        <style>
+          {`
+            .sidebar-scroll::-webkit-scrollbar {
+              display: none;
+            }
+            .sidebar-scroll {
+              -ms-overflow-style: none;  /* For Internet Explorer 10+ */
+              scrollbar-width: none;  /* For Firefox */
+            }
+          `}
+        </style>
+      </div>
+
+      {/* Main Content Section */}
+      <div className='w-full'>
+        <div className='absolute w-[85%] ml-3'>
+          <Outlet />
         </div>
-        <div className=' w-full'>
-            <div className='absolute w-[85%] ml-3'><Outlet /></div>
-            <div className="h-[25%] bg-blue-500 w-full"></div>
-            <div className="w-[75%] bg-white"></div>
-        </div>
+
+        {/* Optional header */}
+        <div className="h-[25%] bg-blue-500 w-full"></div>
+
+        {/* Main content background */}
+        <div className="w-[75%] bg-white"></div>
+      </div>
     </div>
   )
 }

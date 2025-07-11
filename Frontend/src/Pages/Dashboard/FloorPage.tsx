@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
-import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
+import { IoIosAddCircle, IoIosRemoveCircle, IoMdAdd } from "react-icons/io";
 import { RiEditCircleFill } from "react-icons/ri";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,7 +80,7 @@ const FloorPage = () => {
       {/* Top Part */}
       <div className="flex justify-between px-6 mt-3 items-center">
         <div className="ml-4">
-          <h2 className="text-lg font-bold text-white">
+          <h2 className="text-md font-bold font-serif text-white">
             {" "}
             All Floors Data
           </h2>
@@ -89,13 +89,13 @@ const FloorPage = () => {
         <div className="flex items-center justify-center mr-1 gap-4">
           <input
             type="text"
-            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-sm"
+            className="px-3 py-2 text-blue-500 placeholder:text-gray-200 text-center shadow-md bg-white rounded text-xs"
             placeholder="Search Here"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Dialog>
-            <DialogTrigger className="bg-white/20 text-white px-4 py-2 text-sm  rounded font-medium flex items-center gap-2">
+            <DialogTrigger className="bg-white/20 text-white px-4 py-2 text-xs  rounded font-medium flex items-center gap-2">
               <span className="text-md font-bold">
                 <VscGitPullRequestNewChanges />
               </span>{" "}
@@ -103,37 +103,37 @@ const FloorPage = () => {
             </DialogTrigger>
             <DialogContent className="bg-white">
               <DialogHeader>
-                <DialogTitle>Adding New Floor</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-md font-serif font-semibold">Adding New Floor</DialogTitle>
+                <DialogDescription className="text-xs text-gray-300 font-medium">
                   Make sure data that you entered in this dialog registration.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-semibold"># Floor</label>{" "}
+                  <label className="text-xs font-semibold">Floor no</label>{" "}
                   <input
                     type="text"
                     value={F_No}
                     onChange={(e) => setF_No(e.target.value)}
-                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full rounded mt-1 border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="Color" className="text-sm font-semibold">
+                  <label htmlFor="Color" className="text-xs font-semibold">
                     # Rooms
                   </label>{" "}
                   <input
                     type="text"
                     value={No_Rooms}
                     onChange={(e) => setNo_Rooms(e.target.value)}
-                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
               </div>
-              <button className="w-full bg-blue-500 flex font-serif justify-center items-center gap-2 text-md hover:shadow-lg font-semibold py-3 rounded-md text-white mt-2" onClick={handleRegisterSubmit}>
-                <span className=" text-xl">
-                  <IoIosAddCircle />
+              <button className="w-full bg-blue-500 flex font-sans justify-center items-center gap-2 text-xs hover:shadow-lg font-bold py-3 rounded text-white mt-2" onClick={handleRegisterSubmit}>
+                <span className=" text-md font-extrabold">
+                  <IoMdAdd />
                 </span>{" "}
                 Add Floor
               </button>
@@ -145,7 +145,7 @@ const FloorPage = () => {
       <div className=" px-6 mt-6  ">
         <div className="bg-white h-[81vh] rounded-2xl">
           <div className="">
-            <table className="w-full text-sm text-left rtl:text-right ">
+            <table className="w-full text-xs font-medium text-left rtl:text-right ">
               <thead className="text-xs text-white  bg-blue-500 shadow-md rounded-lg">
                 <tr>
                   <th scope="col" className="px-4 py-2.5">
@@ -238,7 +238,7 @@ const FloorPage = () => {
       {/* Pagination Part */}
       <div className="flex justify-between items-center px-6 mt-4">
         <div>
-          <p className="text-sm ml-1 text-gray-400">
+          <p className="text-xs ml-1 text-gray-400">
             <span className="text-[#1a1a1a] text-xs">
               {filteredLaptops.length}{" "}
             </span>{" "}

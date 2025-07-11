@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Floor" ALTER COLUMN "No_Rooms" SET DATA TYPE TEXT;

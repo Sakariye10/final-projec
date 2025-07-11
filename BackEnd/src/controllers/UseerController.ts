@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { comparePassword, hashedPasswordSync } from "../helpers/utils/Bcrypt";
 import bcrypt from 'bcryptjs'
-import { generateToken } from "../helpers/jwt";
+import { customUserRequest, generateToken } from "../helpers/jwt";
 const prisma = new PrismaClient();
 
 // Get All Users
@@ -66,122 +66,130 @@ export const getOneUser = async (req: Request, res: Response) => {
 };
 
 // Creating User 
-export const creatingUser = async ( req : Request , res : Response) => {
-    try {
-        const {Name , Phone , Email , Password} = req.body
-        if(!Name || !Phone || !Email || !Password){
-            res.status(401).json({
-                IsSuccess : false,
-                message : 'Provide Valid Credentials'
-            })
-            return
-        }
-        // If Already Registered 
-        const checkingPhone = await prisma.users.findFirst({
-            where : {
-                Phone
-            }
-        })
-        if(checkingPhone){
-            res.status(401).json({
-                IsSuccess : false,
-                message : 'This user is already registered'
-            })
-            return
-        }
-
-        const Hash = hashedPasswordSync(Password)
-
-        const newUser = await prisma.users.create({
-            data : {
-                Name,
-                Phone,
-                Email,
-                Password : Hash,
-                Role : Email === "yaanbo306@gmail.com" ? "Super_Admin" : "User"
-            }
-        })
-        res.status(201).json({
-            IsSuccess : true,
-            message : 'User Registered Successfully'
-        })
-    } catch (error) {
-        res.status(501).json({
-            IsSuccess : false,
-            message : 'Something Went Wrong '
-        })
+export const creatingUser = async (req: customUserRequest, res: Response) => {
+  try {
+   
+    if(req.User?.Role === "User"){
+      res.status(400).json({
+        IsSuccess : false,
+        message : 'Only Admins Can Make A New User'
+      })
+      return
     }
+    const { Name, Phone, Email, Password } = req.body
+    if (!Name || !Phone || !Email || !Password) {
+      res.status(401).json({
+        IsSuccess: false,
+        message: 'Provide Valid Credentials'
+      })
+      return
+    }
+    // If Already Registered 
+    const checkingPhone = await prisma.users.findFirst({
+      where: {
+        Phone
+      }
+    })
+    if (checkingPhone) {
+      res.status(401).json({
+        IsSuccess: false,
+        message: 'This user is already registered'
+      })
+      return
+    }
+
+    const Hash = hashedPasswordSync(Password)
+
+    const newUser = await prisma.users.create({
+      data: {
+        Name,
+        Phone,
+        Email,
+        Password: Hash,
+        Role: Email === "yaanbo306@gmail.com" ? "Super_Admin" : "User"
+      }
+    })
+    res.status(201).json({
+      IsSuccess: true,
+      message: 'User Registered Successfully'
+    })
+  } catch (error) {
+    res.status(501).json({
+      IsSuccess: false,
+      message: 'Something Went Wrong '
+    })
+  }
 }
 
 
 // Login User
-export const loginUser = async ( req : Request , res : Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   try {
-    const { Email , Password} = req.body
-    if(!Email || !Password){
+    const { Email, Password } = req.body
+    if (!Email || !Password) {
       res.status(400).json({
-        IsSuccess : false,
-        message : 'Provide Valid Login Credentails'
+        IsSuccess: false,
+        message: 'Provide Valid Login Credentails'
       })
       return;
     }
 
     // Checking Email
-     const CheckingEmail = await prisma.users.findFirst({
-      where : {
-        Email : Email
+    const CheckingEmail = await prisma.users.findFirst({
+      where: {
+        Email: Email
       },
-      select : {
-        Password : true,
-        Email : true,
-        Name : true,
-        Phone : true,
-        U_Id : true,
-        Role : true
+      select: {
+        Password: true,
+        Email: true,
+        Name: true,
+        Phone: true,
+        U_Id: true,
+        Role: true
       }
-     })
-     if(!CheckingEmail){
+    })
+    if (!CheckingEmail) {
       res.status(400).json({
-        IsSuccess : false,
-        message : 'Invalid Credentails Via Email'
+        IsSuccess: false,
+        message: 'Invalid Credentails Via Email'
       })
       return
-     }
+    }
     //  Checking Password
-    const CheckingPassword = bcrypt.compareSync(Password , CheckingEmail.Password)
+    const CheckingPassword = bcrypt.compareSync(Password, CheckingEmail.Password)
 
-    if(!CheckingPassword) {
+    if (!CheckingPassword) {
       res.status(400).json({
-        IsSuccess : false,
-        message : 'Invalid Credentails Via Password'
+        IsSuccess: false,
+        message: 'Invalid Credentails Via Password'
       })
       return;
     }
     const result = {
-      Id : CheckingEmail.U_Id,
-      Name : CheckingEmail.Name,
-      Email : CheckingEmail.Email,
-      Phone : CheckingEmail.Phone,
-      token : generateToken({
-        Name : CheckingEmail.Name,
-        Email : CheckingEmail.Email,
-        Phone : CheckingEmail.Phone,
-        U_Id : CheckingEmail.U_Id,
-        Role :  CheckingEmail.Role
+      Id: CheckingEmail.U_Id,
+      Name: CheckingEmail.Name,
+      Email: CheckingEmail.Email,
+      Phone: CheckingEmail.Phone,
+      token: generateToken({
+        Name: CheckingEmail.Name,
+        Email: CheckingEmail.Email,
+        Phone: CheckingEmail.Phone,
+        U_Id: CheckingEmail.U_Id,
+        Role: CheckingEmail.Role
       })
     }
 
     res.status(200).json({
-      IsSuccess : true,
-      message : 'User Logged Successfully',
+      IsSuccess: true,
+      message: 'User Logged Successfully',
       result
     })
 
 
   } catch (error) {
     res.status(400).json({
-      IsSuccess : false,
-      message : 'Something Went Wrong Please Try Again Later'
+      IsSuccess: false,
+      message: 'Something Went Wrong Please Try Again Later'
     })
   }
 }

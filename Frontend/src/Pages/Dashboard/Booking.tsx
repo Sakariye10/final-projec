@@ -39,7 +39,7 @@ import { Button } from "../../components/ui/button";
 import { TbMenu3 } from "react-icons/tb";
 import { getAllBookingFn } from "../../Redux/Dashboard/Booking/AllBooking";
 import { getAllRoomsFn } from "../../Redux/Dashboard/Rooms/AllRooms";
-import { newBookingFn } from "../../Redux/Dashboard/Booking/NewBooking";
+import { newBookingFn, resetBookingState } from "../../Redux/Dashboard/Booking/NewBooking";
 import { getOneRoomFn } from "../../Redux/Dashboard/Rooms/GetOneRoom";
 
 const AllUsers = () => {
@@ -54,7 +54,7 @@ const AllUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filtered laptops based on search term by name, price, or core
-  const filteredLaptops = AllUserState?.data?.filter(
+  const filteredUsers = AllUserState?.data?.filter(
     (item) =>
       item.Cu_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.Cu_Name.toString().includes(searchTerm) ||
@@ -69,23 +69,17 @@ const AllUsers = () => {
 
   const filteredRoooms = AllRoomsData.data.filter(
     (item) => 
-      item.Is_Booked === true
+      item.Is_Booked === false
   )
 
   // New Booking Registration Function Starts In Here
   const newBookingState = useSelector((state: RootState) => state.NewBooking);
   const [Cu_Name, setCu_Name] = useState("");
   const [Cu_Phone, setCu_Phone] = useState("");
-  const [R_Id, setR_Id] = useState("");
-  const [B_Days, setB_Days] = useState("");
-  const [Paid, setPaid] = useState("");
+  const [R_Id, setR_Id] = useState(Number);
+  const [B_Days, setB_Days] = useState(Number);
+  const [Paid, setPaid] = useState(Number);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const data = {};
-    dispatch(newBookingFn(data));
-  };
 
   // Loading Room Price
 const OneRoomState = useSelector((state: RootState) => state.OneRoom);
@@ -96,16 +90,50 @@ useEffect(() => {
   }
 }, [R_Id]); // Dependency should be R_Id (not empty)
 
-const Price = OneRoomState?.data?.R_Type?.Rt_Price
+const Price = +OneRoomState?.data?.R_Type?.Rt_Price
 //@ts-ignore
 const [Total, setTotal] = useState(0);
 
+//@ts-ignore
   useEffect(() => {
     if (Price && B_Days) {
       setTotal(Price * B_Days);
     }
   }, [Price, B_Days]);
 
+  const [Balance , setBalance] = useState(0)
+
+  useEffect(() => {
+    if(Total && Paid){
+      setBalance(Total - Paid)
+    }
+  } , [Total , Paid])
+
+  const handleBookingSubmit = (e : React.FormEvent) => {
+      e.preventDefault()
+      const data = {
+        Cu_Name,
+        Cu_Phone,
+        R_Id,
+        B_Days,
+        Paid
+      }
+      dispatch(newBookingFn(data))
+  }
+
+  useEffect(() => {
+    if(newBookingState.IsLoading){
+      toast.loading('Loading..' , { id : toastId})
+    }
+    if(newBookingState.IsSuccess){
+      toast.success('Booking Successfully Registered' , { id : toastId})
+      dispatch(getAllBookingFn())
+    }
+    if(newBookingState.IsError){
+      toast.error(newBookingState.Err_message , {id : toastId})
+    }
+    dispatch(resetBookingState())
+  } , [newBookingState])
 
 
 
@@ -120,13 +148,13 @@ const [Total, setTotal] = useState(0);
         <div className="flex items-center justify-center mr-1 gap-4">
           <input
             type="text"
-            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-sm"
+            className="px-3 py-2 text-blue-500 placeholder:text-blue-200 text-center shadow-md bg-white rounded text-xs"
             placeholder="Search Here"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Dialog>
-            <DialogTrigger className="bg-white/20 text-white px-6 text-sm py-2 rounded font-medium flex items-center gap-2">
+            <DialogTrigger className="bg-white/20 text-white px-6 text-xs py-2 rounded font-semibold flex items-center gap-2">
               <span className="text-md font-bold">
                 <VscGitPullRequestNewChanges />
               </span>{" "}
@@ -144,96 +172,97 @@ const [Total, setTotal] = useState(0);
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium">Name</label>{" "}
+                  <label className="text-xs font-medium">Name</label>{" "}
                   <input
                     type="text"
                     value={Cu_Name}
                     onChange={(e) => setCu_Name(e.target.value)}
-                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium">Phone</label>{" "}
+                  <label className="text-xs font-medium">Phone</label>{" "}
                   <input
                     type="text"
                     value={Cu_Phone}
                     onChange={(e) => setCu_Phone(e.target.value)}
-                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium">Room Id</label>{" "}
-                  <select className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                  <label className="text-xs font-medium">Room Id</label>{" "}
+                  <select className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-xs font-medium ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
                   value={R_Id}
-                 onChange={(e) => setR_Id(e.target.value)}
+                 onChange={(e) => setR_Id(Number(e.target.value))}
                   >
-                    <option selected>Choose Room No</option>
+                    <option selected className="bg-blue-400 text-white">Choose Room No</option>
                     {filteredRoooms.map((item, idx) => (
-                      <option value={item.R_Id}>{item.R_No}</option>
+                      <option className="text-md" value={item.R_Id}>{item.R_No}</option>
                     ))}
                   </select>
                 </div>
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium text-blue-500">
+                  <label className="text-xs font-medium text-blue-500">
                     Price
                   </label>{" "}
                   <input
                     type="text"
                     value={Price ? Price : 0}
                    readOnly
-                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium">
+                  <label className="text-xs font-medium">
                     Booking Days
                   </label>{" "}
                   <input
                     type="text"
                     value={B_Days}
-                    onChange={(e) => setB_Days(e.target.value)}
-                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                    onChange={(e) => setB_Days(Number(e.target.value))}
+                    className='"flex h-10 w-full mt-1 rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium text-blue-500">
+                  <label className="text-xs font-medium text-blue-500">
                     Total
                   </label>{" "}
                   <input
                     type="text"
                     value={Total}
                     readOnly
-                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium">Paid</label>{" "}
+                  <label className="text-xs font-medium">Paid</label>{" "}
                   <input
                     type="text"
                     value={Paid}
-                    onChange={(e) => setPaid(e.target.value)}
-                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
+                    onChange={(e) => setPaid(Number(e.target.value))}
+                    className='"flex h-10 w-full mt-1  rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 focus-visible:ring-offset disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
                 <div className="flex flex-col gap-1">
                   {" "}
-                  <label className="text-sm font-medium text-blue-500 ">
+                  <label className="text-xs font-medium text-blue-500 ">
                     Balance
                   </label>{" "}
                   <input
                     type="text"
                     readOnly
-                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
+                    value={Balance}
+                    className='"flex h-10 w-full mt-1 text-blue-500 rounded border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50'
                   />
                 </div>
               </div>
-              <button className="w-full bg-blue-500 flex justify-center items-center gap-2 text-sm hover:shadow-lg font-semibold py-3 rounded text-white mt-2">
+              <button className="w-full bg-blue-500 flex justify-center items-center gap-2 text-xs hover:shadow-lg font-semibold py-3 rounded text-white mt-2" onClick={handleBookingSubmit}>
                 Book now
               </button>
             </DialogContent>
@@ -244,7 +273,7 @@ const [Total, setTotal] = useState(0);
       <div className=" px-6 mt-6  ">
         <div className="bg-white h-[81vh] rounded-2xl">
           <div className=" mx-auto">
-            <table className="w-full text-sm text-left rtl:text-right ">
+            <table className="w-full text-xs font-medium text-left rtl:text-right ">
               <thead className="text-xs text-white  bg-blue-500 shadow-md rounded-lg">
                 <tr>
                   <th scope="col" className="px-4 py-2.5">
@@ -293,7 +322,7 @@ const [Total, setTotal] = useState(0);
                 </tr>
               </thead>
               <tbody>
-                {filteredLaptops?.map((item, id) => (
+                {filteredUsers?.map((item, id) => (
                   <tr className="bg-white border-b" key={id}>
                     <td className="w-4 p-4">
                       <div className="flex items-center">
@@ -371,9 +400,9 @@ const [Total, setTotal] = useState(0);
       {/* Pagination Part */}
       <div className="flex justify-between items-center px-6 mt-4">
         <div>
-          <p className="text-sm ml-1 text-gray-400">
+          <p className="text-xs ml-1 text-gray-400">
             <span className="text-[#1a1a1a] text-xs">
-              {filteredLaptops.length}{" "}
+              {filteredUsers.length}{" "}
             </span>{" "}
             Booking Registered
           </p>
